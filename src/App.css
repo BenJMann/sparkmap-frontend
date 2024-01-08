@@ -100,10 +100,34 @@
 
   .documentHeader {
     width: 100%;
-    height: 70px;
+    height: 120px;
     border-bottom: 1px solid black;
+    background-color: rgb(111, 165, 245);
   }
 
+  .documentHeaderTabs {
+    display: flex;
+    background-color: rgb(169, 204, 255);
+    border-bottom: 1px solid rgb(127, 127, 255);
+  }
+
+  .headerTab {
+    display: flex;
+    cursor: pointer;
+  }
+
+  .headerTab_inner {
+    background-color: rgb(57, 126, 255);
+  }
+
+  .headerTab_inner_selected {
+    background-color: rgb(25, 79, 181)
+  }
+
+
+  .documentHeaderBody {
+    padding: 5px;
+  }
   .alignRight {
     display: flex;
     justify-content: right;
@@ -122,12 +146,26 @@
     border-radius: 10px;
   }
 
+  .cellText {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      cursor: default
+  }
+
   .myCell {
     background-color: rgb(180, 255, 180);
   }
 
   .yourCell {
     background-color: rgb(207, 207, 255);
+  }
+
+  .lockedCell {
+    background-color: rgb(255, 72, 72);
   }
 
 .selected {

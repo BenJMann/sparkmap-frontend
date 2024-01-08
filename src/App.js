@@ -10,7 +10,7 @@ import Logout from './Screens/Logout.js';
 import Dashboard from "./Screens/Dashboard.js"
 import Home from './Screens/Home.js';
 import Interface from './Screens/Interface.js';
-import Document from './Screens/Document.js';
+import Document from './Screens/Document/Document.js';
 
 import WebsocketsProvider from './WebsocketsProvider.js';
 import LoginProvider from './LoginProvider.js';
