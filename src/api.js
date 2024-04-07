@@ -1,4 +1,4 @@
-const url = "http://localhost:5000/"
+const url = process.env.REACT_APP_API
 
 const encode = (data) => {
   var formBody = [];

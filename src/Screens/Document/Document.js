@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, useContext, useLayoutEffect } from "react"
+import { useState, useEffect, useCallback, useRef, useContext, useLayoutEffect, createContext } from "react"
 import { useParams } from "react-router-dom"
 
 
@@ -28,6 +28,8 @@ const Document = () => {
         padding: 5,
         maxWidth: 250
     })
+
+    const documentContext = createContext(null);
 
     const [data, setData] = useState([])
 
@@ -314,6 +316,51 @@ const Document = () => {
         }
      }, [browseModifier])
 
+     const docCtxt = {
+        data,
+        setData,
+        setWaitingUpdateQueue,
+        waitingUpdateQueue,
+        setUpdatePending,
+        updatePending,
+        calculatePath,
+        setCursor,
+        cursor,
+        documentId,
+        nodeStyle,
+        getDimensionsOfNode,
+        setScreenPosBeforeBrowseModifierChange,
+        isEditing,
+        editText,
+        browseModifier,
+        getNodeScreenPosition,
+        setGridWindowRefresh,
+        setBrowseModifier,
+        deleteCell,
+        updateNodeText,
+        isNewNode,
+        setIsNewNode,
+        createSiblingNode,
+        createChildNode,
+        editCell,
+        setIsEditing,
+        setCursor,
+        grid,
+        setGrid,
+        screenPosition,
+        setGridWindow,
+        gridWindow,
+        setScreenPosition,
+        setTotalDimensions,
+        setHoveredNode,
+        hoveredNode,
+        updateNodeText,
+        setEditText,
+        screenDimensions,
+        username,
+        editContainerDimensions,
+        totalDimensions
+     }
     
 
     return (
