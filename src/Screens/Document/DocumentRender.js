@@ -1,9 +1,18 @@
-import { useEffect, forwardRef } from "react";
+import { useEffect, forwardRef, useContext } from "react";
 import { Plus } from "@styled-icons/fa-solid"
 
-const DocumentRender = forwardRef(({data, setGrid, grid, screenPosition, browseModifier, setGridWindow, gridWindow, setGridWindowRefresh, setScreenPosition, setTotalDimensions, 
-                        setHoveredNode, hoveredNode, createSiblingNode, createChildNode, updateNodeText, setCursor, cursor, isEditing, setEditText, 
-                        editText, nodeStyle, screenDimensions, username, editContainerDimensions, totalDimensions}, editRef) => {
+import { DocumentContext } from "./Document";
+
+const DocumentRender = forwardRef((_, editRef) => {
+    const {data, grid, setGrid, gridWindow, setGridWindow, setGridWindowRefresh,
+        screenPosition, setScreenPosition, screenDimensions, totalDimensions, setTotalDimensions,
+        setCursor, cursor,
+        isEditing, editText, setEditText, editContainerDimensions,
+        browseModifier, setHoveredNode, hoveredNode,
+        createSiblingNode, createChildNode, updateNodeText,
+        nodeStyle,username
+        } = useContext(DocumentContext)
+
     useEffect(() => {
         let y = 0;
         let arr = []

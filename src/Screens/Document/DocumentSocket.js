@@ -1,10 +1,12 @@
 import { useEffect, useContext } from "react";
 import { WebsocketsContext } from "../../WebsocketsProvider"
 import { LoginContext } from "../../LoginProvider"
+import { DocumentContext } from "./Document";
 
-const DocumentSocket = ({data, setData, setWaitingUpdateQueue, waitingUpdateQueue, setUpdatePending, updatePending, calculatePath, setCursor, cursor, documentId, nodeStyle, getDimensionsOfNode}) => {
+const DocumentSocket = () => {
     const {socket, socketLoaded} = useContext(WebsocketsContext);
     const {sessionLoaded } = useContext(LoginContext);
+    const {data, setData, setWaitingUpdateQueue, waitingUpdateQueue, setUpdatePending, updatePending, calculatePath, setCursor, cursor, documentId, nodeStyle, getDimensionsOfNode} = useContext(DocumentContext)
 
     const runScheduledUpdates = (temporaryId) => {
         if (!updatePending[temporaryId]) return;

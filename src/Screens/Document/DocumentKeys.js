@@ -1,20 +1,20 @@
-import { useCallback, forwardRef } from "react";
-
-const DocumentKeys = forwardRef(({cursor, isEditing, editText, data, browseModifier, 
-                        setScreenPosBeforeBrowseModifierChange,
-                        getNodeScreenPosition,
-                        setGridWindowRefresh,
-                        setBrowseModifier,
-                        deleteCell,
-                        updateNodeText,
-                        isNewNode,
-                        setIsNewNode,
-                        createSiblingNode,
-                        createChildNode,
-                        editCell,
-                        setIsEditing,
-                        setCursor,
-                         children}, ref) => {
+import { useCallback, forwardRef, useContext } from "react";
+import { DocumentContext } from "./Document";
+const DocumentKeys = forwardRef(({children}, ref) => {
+    const {cursor, isEditing, editText, data, browseModifier, 
+        setScreenPosBeforeBrowseModifierChange,
+        getNodeScreenPosition,
+        setGridWindowRefresh,
+        setBrowseModifier,
+        deleteCell,
+        updateNodeText,
+        isNewNode,
+        setIsNewNode,
+        createSiblingNode,
+        createChildNode,
+        editCell,
+        setIsEditing,
+        setCursor} = useContext(DocumentContext)
 
     const handleKeyDown = useCallback((event) => {
         if (event.ctrlKey) {

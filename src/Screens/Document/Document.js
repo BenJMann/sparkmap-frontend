@@ -15,6 +15,8 @@ import DocumentKeys from "./DocumentKeys"
 import DocumentRender from "./DocumentRender"
 import DocumentSocket from "./DocumentSocket"
 
+export const DocumentContext = createContext(null);
+
 const Document = () => {
     const {documentId} = useParams()
     const {socket} = useContext(WebsocketsContext);
@@ -28,8 +30,6 @@ const Document = () => {
         padding: 5,
         maxWidth: 250
     })
-
-    const documentContext = createContext(null);
 
     const [data, setData] = useState([])
 
@@ -115,6 +115,9 @@ const Document = () => {
         else if (bottom > screenBottom) dy = bottom - screenBottom
         else dy = 0
 
+        
+        console.log("DR1", documentRef.current)
+
         documentRef.current.scrollTo(screenLeft + dx, screenTop + dy)
     }
 
@@ -124,6 +127,8 @@ const Document = () => {
 
         const screenLeft = documentRef.current.scrollLeft
         const screenTop = documentRef.current.scrollTop;
+
+        console.log("DR", documentRef.current.scrollTop)
 
         return {x: left - screenLeft, y: top - screenTop}
     }
@@ -344,7 +349,6 @@ const Document = () => {
         createChildNode,
         editCell,
         setIsEditing,
-        setCursor,
         grid,
         setGrid,
         screenPosition,
@@ -359,74 +363,25 @@ const Document = () => {
         screenDimensions,
         username,
         editContainerDimensions,
-        totalDimensions
+        totalDimensions,
+        scrollNodeIntoPosition
      }
     
 
     return (
+        <DocumentContext.Provider value={docCtxt}>
         <div>
             <DocumentHeader setShowSharePopup={setShowSharePopup} />
             <SharePopup show={showSharePopup} onHide={() => setShowSharePopup(false)}/>
-            <DocumentSocket 
-            data={data}
-            setData={setData}
-            setWaitingUpdateQueue={setWaitingUpdateQueue}
-            waitingUpdateQueue={waitingUpdateQueue}
-            setUpdatePending={setUpdatePending}
-            updatePending={updatePending}
-            calculatePath={calculatePath}
-            setCursor={setCursor}
-            cursor={cursor}
-            documentId={documentId} 
-            nodeStyle={nodeStyle}
-            getDimensionsOfNode={getDimensionsOfNode}
-            />
+            <DocumentSocket  />
             <div className="documentContainer">
             <img src={Background} width={screenDimensions.width} height={screenDimensions.height} style={{position: 'absolute'}}/>
             <div className="documentContent">
                 <DocumentKeys
-                cursor={cursor} isEditing={isEditing} editText={editText} data={data} browseModifier={browseModifier}
-                setScreenPosBeforeBrowseModifierChange={setScreenPosBeforeBrowseModifierChange}
                 getNodeScreenPosition={getNodeScreenPosition}
-                setGridWindowRefresh={setGridWindowRefresh}
-                setBrowseModifier={setBrowseModifier}
-                deleteCell={deleteCell}
-                updateNodeText={updateNodeText}
-                isNewNode={isNewNode}
-                setIsNewNode={setIsNewNode}
-                createSiblingNode={createSiblingNode}
-                createChildNode={createChildNode}
-                editCell={editCell}
-                setIsEditing={setIsEditing}
-                setCursor={setCursor}
                 ref={documentRef}
                 >
-                    <DocumentRender 
-                    data={data}
-                    setGrid={setGrid}
-                    grid={grid}
-                    screenPosition={screenPosition}
-                    browseModifier={browseModifier}
-                    setGridWindow={setGridWindow}
-                    gridWindow={gridWindow} 
-                    setGridWindowRefresh={setGridWindowRefresh}
-                    setScreenPosition={setScreenPosition}
-                    setTotalDimensions={setTotalDimensions}
-                    setHoveredNode={setHoveredNode}
-                    hoveredNode={hoveredNode}
-                    createSiblingNode={createSiblingNode}
-                    createChildNode={createChildNode}
-                    updateNodeText={updateNodeText}
-                    setCursor={setCursor}
-                    cursor={cursor}
-                    isEditing={isEditing}
-                    setEditText={setEditText}
-                    editText={editText}
-                    nodeStyle={nodeStyle}
-                    screenDimensions={screenDimensions}
-                    username={username}
-                    editContainerDimensions={editContainerDimensions}
-                    totalDimensions={totalDimensions}
+                    <DocumentRender
                     ref={editRef}
                     />
                 </DocumentKeys>
@@ -434,6 +389,7 @@ const Document = () => {
             </div>
             </div>
         </div>
+        </DocumentContext.Provider>
        
     )
 }
