@@ -1,4 +1,4 @@
-import { useCallback, forwardRef, useContext } from "react";
+import { useCallback, forwardRef, useContext, useState } from "react";
 import { DocumentContext } from "./Document";
 const DocumentKeys = forwardRef(({children}, ref) => {
     const {cursor, isEditing, editText, data, browseModifier, 
@@ -14,8 +14,11 @@ const DocumentKeys = forwardRef(({children}, ref) => {
         createChildNode,
         editCell,
         setIsEditing,
-        setCursor} = useContext(DocumentContext)
-
+        setCursor,
+        totalDimensions,
+        screenDimensions,
+        screenPosition,
+        setScreenPosition} = useContext(DocumentContext)
     const handleKeyDown = useCallback((event) => {
         if (event.ctrlKey) {
             if (event.key === "e") {
@@ -133,15 +136,22 @@ const DocumentKeys = forwardRef(({children}, ref) => {
                 }
             }
         }
-     }, [cursor, isEditing, editText, data, browseModifier])
+     }, [cursor, isEditing, editText, data, browseModifier, screenPosition])
 
 
-    return <div    
-    style={{outline: 'none'}}             
-    tabIndex="0"
-    onKeyDown={handleKeyDown} 
-    ref={ref}>
-    {children}
+    return <div className="documentContent inner" 
+            onScroll={(e) => {setScreenPosition({x: e.currentTarget.scrollLeft, y: e.currentTarget.scrollTop})}} 
+            style={{width: screenDimensions.width, height: screenDimensions.height}}
+            ref={ref}
+            >
+                <div    
+                    style={{outline: 'none'}}             
+                    tabIndex="0"
+                    onKeyDown={handleKeyDown} 
+                    >
+                    {children}
+                </div>
+                <div className="stretcher" style={{top: totalDimensions.height, left: totalDimensions.width}}></div>
     </div>
 })
 

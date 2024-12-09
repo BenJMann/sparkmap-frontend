@@ -105,10 +105,7 @@ const DocumentRender = forwardRef((_, editRef) => {
 
 
     return (
-        <div className="documentContent inner" 
-                onScroll={(e) => {setScreenPosition({x: e.currentTarget.scrollLeft, y: e.currentTarget.scrollTop})}} 
-                style={{width: screenDimensions.width, height: screenDimensions.height}}
-                >
+
                     <>
                     {gridWindow.map((row, y) => {
                         if (!row) return null
@@ -185,8 +182,7 @@ const DocumentRender = forwardRef((_, editRef) => {
                     })}
                     </>
 
-                    <div className="stretcher" style={{top: totalDimensions.height, left: totalDimensions.width}}></div>
-                </div>
+
     )
 })
 
