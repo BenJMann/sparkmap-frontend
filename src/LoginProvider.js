@@ -11,7 +11,6 @@ export const LoginContext = createContext(null)
 
 const LoginProvider = () => {
     const [loggedIn, setLoggedIn] = useState(false);
-    const [sessionLoaded, setSessionLoaded] = useState(false);
     const {socket, socketLoaded} = useContext(WebsocketsContext)
     const [un, setUn] = useState(null);
 
@@ -20,8 +19,9 @@ const LoginProvider = () => {
     useEffect(() => {
         if (socketLoaded) {
             socket.removeAllListeners("loggedIn");
-            socket.on("loggedIn", () => {
-                navigate("/dashboard")
+            socket.on("loggedIn", (reload) => {
+                if (!reload)
+                    navigate("/dashboard")
                 setLoggedIn(true)
             })
             socket.removeAllListeners("loggedOut");
@@ -29,24 +29,6 @@ const LoginProvider = () => {
                 navigate("/")
                 setLoggedIn(false)
             })
-            socket.removeAllListeners("sessionLoaded");
-            socket.on("sessionLoaded", () => {
-                setSessionLoaded(true);
-            })
-        }
-    }, [socketLoaded])
-
-    const loadSession = async() => {
-        if (sessionStorage.getItem('token')) {
-            setLoggedIn(true);
-            socket.emit("loadSession", {token: sessionStorage.getItem("token").split(" ")[1]})
-        }
-    }
-
-    useEffect(() => {
-        if (socketLoaded) {
-            loadSession();
-            setUn(sessionStorage.getItem("username"))
         }
     }, [socketLoaded])
 
@@ -69,11 +51,16 @@ const LoginProvider = () => {
             socket.emit("logOut")
     }
 
+    useEffect(() => {
+        if (socketLoaded && !loggedIn && sessionStorage.getItem('token')) {
+            socket.emit("login", {reload: true, token: sessionStorage.getItem('token').split(" ")[1]})
+        }
+    }, [socketLoaded, loggedIn])
+
     const data = {
         loggedIn,
         login,
         logout,
-        sessionLoaded,
         username: un
     }
     

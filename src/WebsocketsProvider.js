@@ -6,18 +6,18 @@ export const WebsocketsContext = createContext(null)
 
 const WebsocketsProvider = () => {
     const socket = useRef(null);
-    const [socketSet, setSocketSet] = useState(false)
+    const [socketLoaded, setSocketLoaded] = useState(false)
 
     useEffect(() => {
-        if (!socketSet) {
+        if (!socketLoaded) {
             socket.current = socketIOClient(process.env.REACT_APP_API, {transports: ['websocket']});
-            setSocketSet(true)
+            setSocketLoaded(true)
         }
     }, []);
 
     const data = {
         socket: socket.current,
-        socketLoaded: socketSet
+        socketLoaded
     }
     
     return <WebsocketsContext.Provider value={data}><Outlet /></WebsocketsContext.Provider>

@@ -5,7 +5,7 @@ import { DocumentContext } from "./Document";
 
 const DocumentSocket = () => {
     const {socket, socketLoaded} = useContext(WebsocketsContext);
-    const {sessionLoaded } = useContext(LoginContext);
+    const {loggedIn} = useContext(LoginContext)
     const {data, setData, setWaitingUpdateQueue, waitingUpdateQueue, setUpdatePending, updatePending, calculatePath, setCursor, cursor, documentId, nodeStyle, getDimensionsOfNode} = useContext(DocumentContext)
 
     const runScheduledUpdates = (temporaryId) => {
@@ -67,10 +67,10 @@ const DocumentSocket = () => {
 
 
     useEffect(() => {
-        if (sessionLoaded) {
+        if (socketLoaded && loggedIn) {
             socket.emit("loadDocument", {documentId})
         }
-    }, [sessionLoaded])
+    }, [socketLoaded, loggedIn])
 
 
 
