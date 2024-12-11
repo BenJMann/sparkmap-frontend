@@ -97,7 +97,7 @@ const Document = () => {
 
     const scrollNodeIntoView = (node) => {
         const left = node.xPx;
-        const right = node.xPx + node.width
+        const right = node.xPx + node.width + 22
         const top = node.yPx;
         const bottom = node.yPx + node.height + 22;
 
@@ -202,6 +202,7 @@ const Document = () => {
         node.width = width;
         node.height = height;
         node.creator = username
+        scrollNodeIntoView(node)
         setIsEditing(false);
         setIsNewNode(false);
         setData([...data])
