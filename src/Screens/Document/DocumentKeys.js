@@ -139,20 +139,17 @@ const DocumentKeys = forwardRef(({children}, ref) => {
      }, [cursor, isEditing, editText, data, browseModifier, screenPosition])
 
 
-    return <div className="documentContent inner" 
-            onScroll={(e) => {setScreenPosition({x: e.currentTarget.scrollLeft, y: e.currentTarget.scrollTop})}} 
-            style={{width: screenDimensions.width, height: screenDimensions.height}}
-            ref={ref}
-            >
-                <div    
-                    style={{outline: 'none'}}             
-                    tabIndex="0"
+    return <div     tabIndex="0"
                     onKeyDown={handleKeyDown} 
+                    ref={ref}
+                    className="documentContent inner" 
+                    onScroll={(e) => {setScreenPosition({x: e.currentTarget.scrollLeft, y: e.currentTarget.scrollTop})}} 
+                    style={{width: screenDimensions.width, height: screenDimensions.height, outline: 'none'}}
                     >
                     {children}
+                    <div className="stretcher" style={{top: totalDimensions.height, left: totalDimensions.width}}></div>
                 </div>
-                <div className="stretcher" style={{top: totalDimensions.height, left: totalDimensions.width}}></div>
-    </div>
+
 })
 
 export default DocumentKeys

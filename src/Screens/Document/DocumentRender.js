@@ -3,7 +3,7 @@ import { Plus } from "@styled-icons/fa-solid"
 
 import { DocumentContext } from "./Document";
 
-const DocumentRender = forwardRef((_, editRef) => {
+const DocumentRender = () => {
     const {data, grid, setGrid, gridWindow, setGridWindow, setGridWindowRefresh,
         screenPosition, setScreenPosition, screenDimensions, totalDimensions, setTotalDimensions,
         setCursor, cursor,
@@ -173,9 +173,7 @@ const DocumentRender = forwardRef((_, editRef) => {
 
                                 </div>
                                 :
-                                <div className="editContainer" style={{top: row.yPx, left: row.xPx, width: editContainerDimensions.width, height: editContainerDimensions.height}}>
-                                    <input value={editText} ref={editRef} onChange={(e) => setEditText(e.target.value)} />
-                                </div>
+                                null
                             }
                             </>
                         )
@@ -184,6 +182,6 @@ const DocumentRender = forwardRef((_, editRef) => {
 
 
     )
-})
+}
 
 export default DocumentRender

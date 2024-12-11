@@ -14,6 +14,7 @@ import DocumentHeader from "./DocumentHeader"
 import DocumentKeys from "./DocumentKeys"
 import DocumentRender from "./DocumentRender"
 import DocumentSocket from "./DocumentSocket"
+import DocumentEditContainer from "./DocumentEditContainer"
 
 export const DocumentContext = createContext(null);
 
@@ -115,9 +116,6 @@ const Document = () => {
         else if (bottom > screenBottom) dy = bottom - screenBottom
         else dy = 0
 
-        
-        console.log("DR1", documentRef.current)
-
         documentRef.current.scrollTo(screenLeft + dx, screenTop + dy)
     }
 
@@ -127,8 +125,6 @@ const Document = () => {
 
         const screenLeft = documentRef.current.scrollLeft
         const screenTop = documentRef.current.scrollTop;
-
-        console.log("DR", documentRef.current.scrollTop)
 
         return {x: left - screenLeft, y: top - screenTop}
     }
@@ -175,7 +171,7 @@ const Document = () => {
         node.parent.children = [...node.parent.children.slice(0, idx + (!before ? 1 : 0)), {text: '', width: nodeStyle.minWidth, height: nodeStyle.minHeight, temporaryId, creator: username}, ...node.parent.children.slice(idx + (!before ? 1 : 0), node.parent.children.length)]
         setData([...data])
         setCursor(node.parent.children[idx + (!before ? 1 : 0)])
-        setEditText(key)
+        setEditText(key ?? "")
         setIsEditing(true);
         setGridWindowRefresh(true);
         addToWaitingUpdateQueue(node.parent.children[idx + (!before ? 1 : 0)])
@@ -191,7 +187,7 @@ const Document = () => {
         setData([...data])
         setCursor(node.children[0])
         addToWaitingUpdateQueue(node.children[0])
-        setEditText(key)
+        setEditText(key ?? "")
         setIsEditing(true);
         setGridWindowRefresh(true);
         if (node.id)
@@ -217,7 +213,7 @@ const Document = () => {
 
     const editCell = (node, text) => {
         setIsEditing(true);
-        setEditText(text);
+        setEditText(text ?? "");
 
         if (node.id)
             socket.emit("lockCell", {path: calculatePath(node)})
@@ -291,13 +287,14 @@ const Document = () => {
             setScreenPosBeforeBrowseModifierChange(null)
         }
     }, [screenPosBeforeBrowseModifierChange, gridWindowRefresh])
-    
+
+
     useEffect(() => {
         if (isEditing && !gridWindowRefresh) {
           scrollNodeIntoView(cursor);
-          setTimeout(() => editRef.current.focus(),10)
+          editRef?.current?.focus()
         } else {
-          documentRef.current.focus();
+          documentRef.current.focus({preventScroll: true});
         }
       }, [isEditing, gridWindowRefresh]);
 
@@ -377,14 +374,13 @@ const Document = () => {
             <div className="documentContainer">
             <img src={Background} width={screenDimensions.width} height={screenDimensions.height} style={{position: 'absolute'}}/>
             <div className="documentContent">
-                <DocumentKeys
-                getNodeScreenPosition={getNodeScreenPosition}
-                ref={documentRef}
-                >
-                    <DocumentRender
-                    ref={editRef}
-                    />
-                </DocumentKeys>
+                        <DocumentKeys
+                        getNodeScreenPosition={getNodeScreenPosition}
+                        ref={documentRef}
+                        >
+                            <DocumentRender />
+                            <DocumentEditContainer ref={editRef} />
+                        </DocumentKeys>
 
             </div>
             </div>
