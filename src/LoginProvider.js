@@ -54,6 +54,8 @@ const LoginProvider = () => {
     useEffect(() => {
         if (socketLoaded && !loggedIn && sessionStorage.getItem('token')) {
             socket.emit("login", {reload: true, token: sessionStorage.getItem('token').split(" ")[1]})
+            const username = sessionStorage.getItem('username')
+            setUn(username)
         }
     }, [socketLoaded, loggedIn])
 

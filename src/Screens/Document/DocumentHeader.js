@@ -6,7 +6,10 @@ import TabLeftSelected from '../../Images/tab_left_selected.png'
 import TabRightSelected from '../../Images/tab_right_selected.png'
 import TabGeneral from "./HeaderTabs/TabGeneral"
 
+
+
 const DocumentHeader = ({setShowSharePopup}) => {
+
     const [currentTab, setCurrentTab] = useState(0)
 
     const tabs = [

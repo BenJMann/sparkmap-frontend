@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom"
 
 
 import Background from "../../Images/texture.jpg"
+import Loading from '../../Images/loading.gif'
+
 
 import { WebsocketsContext } from "../../WebsocketsProvider"
 
@@ -15,8 +17,11 @@ import DocumentKeys from "./DocumentKeys"
 import DocumentRender from "./DocumentRender"
 import DocumentSocket from "./DocumentSocket"
 import DocumentEditContainer from "./DocumentEditContainer"
+import { V } from "@styled-icons/fa-solid"
 
 export const DocumentContext = createContext(null);
+
+
 
 const Document = () => {
     const {documentId} = useParams()
@@ -40,6 +45,8 @@ const Document = () => {
     const [screenDimensions, setScreenDimensions] = useState({width: 1800, height: 800})
 
     const [totalDimensions, setTotalDimensions] = useState({width: 0, height: 0})
+
+    const [documentName, setDocumentName] = useState("")
 
     const [cursor, setCursor] = useState(data[0])
     const [isEditing, setIsEditing] = useState(false);
@@ -330,6 +337,8 @@ const Document = () => {
         setCursor,
         cursor,
         documentId,
+        documentName,
+        setDocumentName,
         nodeStyle,
         getDimensionsOfNode,
         setScreenPosBeforeBrowseModifierChange,
@@ -379,8 +388,14 @@ const Document = () => {
                         getNodeScreenPosition={getNodeScreenPosition}
                         ref={documentRef}
                         >
+                            {data.length === 0 ?
+                            <img src={Loading} style={{position: 'absolute', top: (window.innerHeight/2)-150, left: (window.innerWidth/2)-150}} />
+                        :
+                        <>
                             <DocumentRender />
-                            <DocumentEditContainer ref={editRef} />
+                            <DocumentEditContainer ref={editRef} />         
+                        </>}
+
                         </DocumentKeys>
 
             </div>

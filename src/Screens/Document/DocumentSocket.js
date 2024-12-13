@@ -6,7 +6,7 @@ import { DocumentContext } from "./Document";
 const DocumentSocket = () => {
     const {socket, socketLoaded} = useContext(WebsocketsContext);
     const {loggedIn} = useContext(LoginContext)
-    const {data, setData, setWaitingUpdateQueue, waitingUpdateQueue, setUpdatePending, updatePending, calculatePath, setCursor, cursor, documentId, nodeStyle, getDimensionsOfNode} = useContext(DocumentContext)
+    const {data, setData, setWaitingUpdateQueue, waitingUpdateQueue, setUpdatePending, updatePending, calculatePath, setCursor, cursor, documentId, nodeStyle, getDimensionsOfNode, setDocumentName} = useContext(DocumentContext)
 
     const runScheduledUpdates = (temporaryId) => {
         if (!updatePending[temporaryId]) return;
@@ -143,6 +143,7 @@ const DocumentSocket = () => {
                 }
                 setWidth(d.nodes[0]);
                 setData(d.nodes)
+                setDocumentName(d.document.documentName)
             })
 
             socket.removeAllListeners("cellLocked");
