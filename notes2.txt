@@ -1,0 +1,29 @@
+Sparkmap
+	Brain dump feature... Dump before sorting/categorising
+	Bread crumb trail with settings to specify length
+	Link documents i.e. project support materials
+	COMPLETELY different styles for different Sparkmaps e.g. linked document
+	Different entry points with different videos and guidance for different use cases and user types
+	Empty node auto deletes
+	"Ere, it's just a list with indentation"
+		-The tool is what you make of it
+	How well can a.i. generate a mind map from spoken audio
+	More code tidy
+	Organize scattered sparkmap notes
+		Ben free brainstorm spreadsheet,
+		Inside sparkmap live db
+		Silverfox backup todos
+		Current todos
+		Notes in planner
+	Prompts
+	Mui subdirectory icon
+	Share parts of a previously created document
+
+	Release features real-time on live demo
+	Show multiple user avatars when multiple editors
+	Show text AND typing animation for updating nodes
+	Split nodes based on cursor position
+	Create sub node when editing a different user's node (on input change)
+	Test multiple user features
+	User settings for documents
+	Import CSV
