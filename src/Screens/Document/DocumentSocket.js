@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { WebsocketsContext } from "../../WebsocketsProvider"
 import { LoginContext } from "../../LoginProvider"
 import { DocumentContext } from "./Document";
@@ -73,9 +73,14 @@ const DocumentSocket = () => {
     }, [socketLoaded, loggedIn])
 
 
+    const [socketDisconnected, setSocketDisconnected] = useState(false)
 
     useEffect(() => {
         if (socketLoaded) {
+            socket.removeAllListeners("disconnect")
+            socket.on("disconnect", () => {
+                setSocketDisconnected(true)
+            })
             socket.removeAllListeners("newSiblingNodeCreated");
             socket.on("newSiblingNodeCreated", (d) => {
                 const pathResult = resolvePath(d.path);
@@ -192,6 +197,9 @@ const DocumentSocket = () => {
         }
     }, [socketLoaded, data, cursor])
 
+    if (socketDisconnected) {
+        return <div className="disconnectBar">Socket disconnected. Please refresh the page.</div>
+    }
     return null
 }
 

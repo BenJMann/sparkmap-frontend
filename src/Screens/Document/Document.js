@@ -280,8 +280,8 @@ const Document = () => {
     }, []);
 
     useEffect(() => {
-        const width = windowSize.width - 20;
-        const height = windowSize.height - 150;
+        const width = windowSize.width;
+        const height = windowSize.height - 125;
         setScreenDimensions({width, height})
     }, [windowSize])
 

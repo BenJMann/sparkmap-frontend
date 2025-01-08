@@ -1,3 +1,7 @@
+body {
+  margin: 0;
+}
+
 .center-screen {
     display: flex;
     justify-content: center;
@@ -237,5 +241,17 @@
     width: 10px;
     height: 10px;
     margin: 0 2px;
+    color: white;
+  }
+
+  .disconnectBar {
+    position: absolute;
+    background-color: red;
+    width: 100%;
+    height: 20px;
+    top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: white;
   }
