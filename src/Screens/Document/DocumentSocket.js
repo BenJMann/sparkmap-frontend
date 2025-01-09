@@ -18,6 +18,8 @@ const DocumentSocket = () => {
                 socket.emit("newSiblingNode", {path: calculatePath(upd.node), before: upd.before, temporaryId: upd.temporaryId})
             else if (upd.type === "newChildNode")
                 socket.emit("newChildNode", {path: calculatePath(upd.node), temporaryId: upd.temporaryId})
+            else if (upd.type === "appendChildNode")
+                socket.emit("appendChildNode", {path: calculatePath(upd.node), temporaryId: upd.temporaryId})
             else if (upd.type === "updateNodeText")
                 socket.emit("updateNodeText", {path: calculatePath(upd.node), text: upd.text})
             else if (upd.type === 'lockCell')
@@ -113,6 +115,18 @@ const DocumentSocket = () => {
                 if (pathResult.status === "success") {
                     const node = pathResult.node;
                     node.children = [{text: '', id: d.id, creator: d.creator, width: nodeStyle.minWidth, height: nodeStyle.minHeight, locked: d.locked}]
+                    setData([...data])
+                } else {
+                    console.log("Path resolve error: " + pathResult.message)
+                }
+            })
+
+            socket.removeAllListeners("newChildNodeAppended");
+            socket.on("newChildNodeAppended", (d) => {
+                const pathResult = resolvePath(d.path);
+                if (pathResult.status === "success") {
+                    const node = pathResult.node;
+                    node.children = [...node.children, {text: '', id: d.id, creator: d.creator, width: nodeStyle.minWidth, height: nodeStyle.minHeight, locked: d.locked}]
                     setData([...data])
                 } else {
                     console.log("Path resolve error: " + pathResult.message)

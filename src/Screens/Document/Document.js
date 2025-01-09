@@ -189,6 +189,8 @@ const Document = () => {
     }
 
     const createChildNode = (node, key) => {
+        if (node.children) return appendChildNode(node, key)
+
         const temporaryId = getTemporaryId()
         node.children = [{text: '', width: nodeStyle.minWidth, height: nodeStyle.minHeight, temporaryId, creator: username}]
         setData([...data])
@@ -201,6 +203,21 @@ const Document = () => {
             socket.emit("newChildNode", {path: calculatePath(node), temporaryId})
         else
             scheduleUpdate(node.temporaryId, {node, type: 'newChildNode', temporaryId})
+    }
+
+    const appendChildNode = (node, key) => {
+        const temporaryId = getTemporaryId()
+        node.children = [...node.children, {text: '', width: nodeStyle.minWidth, height: nodeStyle.minHeight, temporaryId, creator: username}]
+        setData([...data])
+        setCursor(node.children[node.children.length-1])
+        addToWaitingUpdateQueue(node.children[node.children.length-1])
+        setEditText(key ?? "")
+        setIsEditing(true);
+        setGridWindowRefresh(true);
+        if (node.id)
+            socket.emit("appendChildNode", {path: calculatePath(node), temporaryId})
+        else
+            scheduleUpdate(node.temporaryId, {node, type: 'appendChildNode', temporaryId})
     }
 
     const updateNodeText = (node, text) => {
