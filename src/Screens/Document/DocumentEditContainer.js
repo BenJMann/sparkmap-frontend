@@ -12,7 +12,7 @@ const DocumentEditContainer = forwardRef((_, editRef) => {
         const tmout = setTimeout(() => {
             setIsEditing(false)
             updateNodeText(cursor, editText);
-        }, 10)
+        }, 100)
         setFocusTimeout(tmout)
     }
     const handleFocus = () => {
@@ -24,8 +24,8 @@ const DocumentEditContainer = forwardRef((_, editRef) => {
     width: editContainerDimensions.width, height: editContainerDimensions.height}}>
         <input value={editText} 
         ref={editRef} 
-        onBlur={(e) => { handleBlur()}} 
-        onFocus={handleFocus}
+        // onBlur={(e) => { handleBlur()}} 
+        // onFocus={handleFocus}
         onChange={(e) => setEditText(e.target.value ?? "")} />
     </div>
 })

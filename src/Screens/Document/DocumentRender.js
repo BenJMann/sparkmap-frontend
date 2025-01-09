@@ -138,7 +138,7 @@ const DocumentRender = () => {
                                     className={"cell " + (cursor===row ? 'selected ' : '') + (row.locked ? 'lockedCell' : (row.creator === username ? 'myCell' : 'yourCell'))} 
                                     style={{left: row.xPx, top: row.yPx, height: row.height, width: row.width }}
                                     >
-                                        <div className="cellText" style={{position: 'relative', padding: nodeStyle.padding}}>{row.text}
+                                        <div className="cellText" style={{position: 'relative', padding: nodeStyle.padding}}>{row.id?.slice?.(0, 4)}
                                         </div>
                                     </div>
                                 
