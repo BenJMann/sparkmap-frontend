@@ -382,7 +382,6 @@ const Document = () => {
         setTotalDimensions,
         setHoveredNode,
         hoveredNode,
-        updateNodeText,
         setEditText,
         screenDimensions,
         username,
