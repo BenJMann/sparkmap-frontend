@@ -255,7 +255,7 @@ const Document = () => {
             setCursor(children[0])
         }
         else {
-            if (parent.children.length > 2)
+            if (parent.children.length >= 2)
                 parent.children = [...parent.children.slice(0, idx), ...parent.children.slice(idx+1, parent.children.length)]
             else
                 parent.children = null

@@ -185,7 +185,7 @@ const DocumentSocket = () => {
                     const parent = node.parent;
                     const idx = parent.children.indexOf(node);
                     const children = node.children;
-                    const cursorOnNode = cursor.id === node.id;
+                    const cursorOnNode = cursor && cursor.id === node.id;
 
                     if (children) {
                         parent.children = [...parent.children.slice(0, idx), ...children, ...parent.children.slice(idx+1, parent.children.length)]
@@ -194,7 +194,7 @@ const DocumentSocket = () => {
                         }
                     }
                     else {
-                        if (parent.children.length > 2)
+                        if (parent.children.length >= 2)
                             parent.children = [...parent.children.slice(0, idx), ...parent.children.slice(idx+1, parent.children.length)]
                         else
                             parent.children = null
