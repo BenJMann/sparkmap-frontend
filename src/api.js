@@ -41,27 +41,3 @@ export async function ApiGetHi() {
   
     return await response.json();
   }
-  
-  
-//   export async function APISaveTest(expectedOutcome, instructions, description, category) {
-//     const token = sessionStorage.getItem('token')
-//       const formBody = encode({
-//           expectedOutcome,
-//           instructions: JSON.stringify(instructions),
-//           description,
-//           category
-//       });
-      
-//       const response = await fetch(url+"addTest", {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-//           authorization: token
-//         },
-//         body: formBody
-//       })
-//       if (response.status >= 400)
-//         throw (new Error('Network request failed'))
-  
-//       return await response.json()
-//   }
