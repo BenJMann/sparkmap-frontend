@@ -3,6 +3,8 @@ import { Plus } from "@styled-icons/fa-solid"
 
 import { DocumentContext } from "./Document";
 
+import calculateNodeStyle from "../CalculateNodeStyles";
+
 const DocumentRender = () => {
     const {data, grid, setGrid, gridWindow, setGridWindow, setGridWindowRefresh,
         screenPosition, setScreenPosition, screenDimensions, totalDimensions, setTotalDimensions,
@@ -136,7 +138,7 @@ const DocumentRender = () => {
                                         } setCursor(row);
                                     }} 
                                     className={"cell " + (cursor===row ? 'selected ' : '') + (row.locked ? 'lockedCell' : (row.creator === username ? 'myCell' : 'yourCell'))} 
-                                    style={{left: row.xPx, top: row.yPx, height: row.height, width: row.width }}
+                                    style={{left: row.xPx, top: row.yPx, height: row.height, width: row.width, ...calculateNodeStyle(row) }}
                                     >
                                         <div className="cellText" style={{position: 'relative', padding: nodeStyle.padding}}>{row.text}
                                         </div>

@@ -161,6 +161,8 @@ body {
     position: absolute;
     border: 1px solid black;
     border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11pt;
   }
 
   .cellText {
@@ -170,7 +172,7 @@ body {
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
-      cursor: default
+      cursor: default;
   }
 
   .myCell {
@@ -268,3 +270,106 @@ body {
     align-items: center;
     color: white;
   }
+
+  
+
+  .font-merriweather {
+    font-family: 'Merriweather', serif;
+  }
+  
+  .font-playfair-display {
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .font-cormorant-garamond {
+    font-family: 'Cormorant Garamond', serif;
+  }
+  
+  .font-crimson-pro {
+    font-family: 'Crimson Pro', serif;
+  }
+  
+  .font-lora {
+    font-family: 'Lora', serif;
+  }
+  
+  .font-roboto {
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .font-open-sans {
+    font-family: 'Open Sans', sans-serif;
+  }
+  
+  .font-montserrat {
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .font-poppins {
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .font-lato {
+    font-family: 'Lato', sans-serif;
+  }
+  
+  .font-oswald {
+    font-family: 'Oswald', sans-serif;
+  }
+  
+  .font-raleway {
+    font-family: 'Raleway', sans-serif;
+  }
+  
+  .font-bebas-neue {
+    font-family: 'Bebas Neue', sans-serif;
+  }
+  
+  .font-abril-fatface {
+    font-family: 'Abril Fatface', serif;
+  }
+  
+  .font-pacifico {
+    font-family: 'Pacifico', cursive;
+  }
+  
+  .font-source-code-pro {
+    font-family: 'Source Code Pro', monospace;
+  }
+  
+  .font-roboto-mono {
+    font-family: 'Roboto Mono', monospace;
+  }
+  
+  .font-fira-code {
+    font-family: 'Fira Code', monospace;
+  }
+  
+  .font-courier-prime {
+    font-family: 'Courier Prime', monospace;
+  }
+  
+  .font-jetbrains-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  .font-dancing-script {
+    font-family: 'Dancing Script', cursive;
+  }
+  
+  .font-patrick-hand {
+    font-family: 'Patrick Hand', cursive;
+  }
+  
+  .font-indie-flower {
+    font-family: 'Indie Flower', cursive;
+  }
+  
+  .font-amatic-sc {
+    font-family: 'Amatic SC', cursive;
+  }
+  
+  .font-shadows-into-light {
+    font-family: 'Shadows Into Light', cursive;
+  }
+  

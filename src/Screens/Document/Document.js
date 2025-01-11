@@ -17,7 +17,8 @@ import DocumentKeys from "./DocumentKeys"
 import DocumentRender from "./DocumentRender"
 import DocumentSocket from "./DocumentSocket"
 import DocumentEditContainer from "./DocumentEditContainer"
-import { V } from "@styled-icons/fa-solid"
+
+import calculateNodeStyle from "../CalculateNodeStyles"
 
 export const DocumentContext = createContext(null);
 
@@ -33,7 +34,7 @@ const Document = () => {
         minHeight: 18,
         marginCollapsed: 5,
         marginExpanded: 20,
-        padding: 5,
+        padding: 10,
         maxWidth: 250
     })
 
@@ -98,7 +99,7 @@ const Document = () => {
     };
 
     const getDimensionsOfNode = (node) => {
-        const {width, height} = getDimensionsOfText(node.text, {minWidth: nodeStyle.minWidth + 'px', minHeight: nodeStyle.minHeight + 'px', padding: nodeStyle.padding + "px", maxWidth: nodeStyle.maxWidth + "px"})
+        const {width, height} = getDimensionsOfText(node.text, {minWidth: nodeStyle.minWidth + 'px', minHeight: nodeStyle.minHeight + 'px', padding: nodeStyle.padding + "px", maxWidth: nodeStyle.maxWidth + "px", ...calculateNodeStyle(node)})
         return {width: width+5, height}
     }
 
