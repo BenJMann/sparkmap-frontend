@@ -32,6 +32,7 @@
     "@fontsource/source-code-pro": "^5.1.1",
     "@mui/icons-material": "^6.3.1",
     "@mui/material": "^6.3.1",
+    "@mui/x-data-grid": "^7.23.6",
     "@styled-icons/fa-solid": "^10.47.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
