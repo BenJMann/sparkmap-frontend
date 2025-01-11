@@ -24,6 +24,8 @@ const DocumentSocket = () => {
                 socket.emit("updateNodeText", {path: calculatePath(upd.node), text: upd.text})
             else if (upd.type === 'lockCell')
                 socket.emit("lockCell", {path: calculatePath(upd.node)})
+            else if (upd.type === 'updateNodeStyle')
+                socket.emit("updateNodeStyle", {path: calculatePath(upd.node), property: upd.property, value: upd.value})
 
             else if (upd.type === 'deleteCell') {
                 const childrenWithoutIds = upd.children ? upd.children.filter((c) => !c.id) : []
@@ -141,7 +143,30 @@ const DocumentSocket = () => {
                     node.text = d.text;
                     node.creator = d.creator;
                     node.locked = false;
-                    const {width, height}= getDimensionsOfNode(d)
+                    const {width, height}= getDimensionsOfNode(node)
+                    node.width = width;
+                    node.height = height;
+                    setData([...data])
+                } else {
+                    console.log("Path resolve error: " + pathResult.message)
+                }
+            })
+
+            socket.removeAllListeners("nodeStyleUpdated");
+            socket.on("nodeStyleUpdated", (d) => {
+                const pathResult = resolvePath(d.path);
+                if (pathResult.status === "success") {
+                    const node = pathResult.node;
+                    console.log(node)
+                    if (!node.style) node.style = {}
+                    if (d.property === 'selectedFont') node.style.selectedFont = d.value
+                    else if (d.property === 'isBold') node.style.isBold = d.value
+                    else if (d.property === 'isItalic') node.style.isItalic = d.value
+                    else if (d.property === 'isUnderlined') node.style.isUnderlined= d.value
+                    else if (d.property === 'fontSize') node.style.fontSize = d.value
+                    else if (d.property === 'textColor') node.style.textColor = d.value
+                    else if (d.property === 'fillColor') node.style.fillColor = d.value
+                    const {width, height}= getDimensionsOfNode(node)
                     node.width = width;
                     node.height = height;
                     setData([...data])

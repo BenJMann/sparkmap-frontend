@@ -6,10 +6,14 @@ import { FormatBold, FormatItalic, FormatUnderlined, FormatColorFill, FormatColo
 import { IconButton } from "@mui/material"
 import ColorPopover from "../../ColorPopover"
 import Button from '@mui/material/Button';
+import { WebsocketsContext } from "../../../WebsocketsProvider"
 
 const TabGeneral = () => {
-    const {grid, documentName, cursor, data, setData} = useContext(DocumentContext)
+    const {grid, documentName, cursor, data, setData, getDimensionsOfNode, calculatePath, scheduleUpdate} = useContext(DocumentContext)
+    const {socket} = useContext(WebsocketsContext)
+    
       const [fontSize, setFontSize] = useState(12);
+      const [sizeTimeout, setSizeTimeout] = useState(null)
       const [isBold, setIsBold] = useState(false);
       const [isItalic, setIsItalic] = useState(false);
       const [isUnderlined, setIsUnderlined] = useState(false)
@@ -24,7 +28,7 @@ const TabGeneral = () => {
             setIsBold(cursor.style?.isBold ?? false)
             setIsItalic(cursor.style?.isItalic ?? false)
             setIsUnderlined(cursor.style?.isUnderlined ?? false)
-            
+
             setSelectedFont(fontClasses.find((c) => c.name === cursor.style?.selectedFont) ?? fontClasses.find((c) => c.name==="Roboto"))
 
             setFontSize(cursor.style?.fontSize?.split?.("p")?.[0] ?? 11)
@@ -61,7 +65,14 @@ const TabGeneral = () => {
             if (!cursor.style) cursor.style = {selectedFont: newValue.name}
             else cursor.style.selectedFont = newValue.name
             setSelectedFont(newValue);
+            const {width, height}= getDimensionsOfNode(cursor)
+            cursor.width = width;
+            cursor.height = height;
             setData([...data])
+            if (cursor.id)
+                socket.emit("updateNodeStyle", {path: calculatePath(cursor), property: 'selectedFont', value: newValue.name})
+            else
+                scheduleUpdate(cursor.temporaryId, {node: cursor, type: 'updateNodeStyle',  property: 'font', value: newValue.name})
         }
       };
 
@@ -71,6 +82,10 @@ const TabGeneral = () => {
             else cursor.style.isBold = !isBold
             setIsBold((prev) => !prev)
             setData([...data])
+            if (cursor.id)
+                socket.emit("updateNodeStyle", {path: calculatePath(cursor), property: 'isBold', value: !isBold})
+            else
+                scheduleUpdate(cursor.temporaryId, {node: cursor, type: 'updateNodeStyle',  property: 'bold', value: !isBold})
         }
        }
 
@@ -80,6 +95,10 @@ const TabGeneral = () => {
             else cursor.style.isItalic = !isItalic
             setIsItalic((prev) => !prev)
             setData([...data])
+            if (cursor.id)
+                socket.emit("updateNodeStyle", {path: calculatePath(cursor), property: 'isItalic', value: !isItalic})
+            else
+                scheduleUpdate(cursor.temporaryId, {node: cursor, type: 'updateNodeStyle',  property: 'italic', value: !isItalic})
         }
        }
 
@@ -89,6 +108,10 @@ const TabGeneral = () => {
             else cursor.style.isUnderlined = !isUnderlined
             setIsUnderlined((prev) => !prev)
             setData([...data])
+            if (cursor.id)
+                socket.emit("updateNodeStyle", {path: calculatePath(cursor), property: 'isUnderlined', value: !isUnderlined})
+            else
+                scheduleUpdate(cursor.temporaryId, {node: cursor, type: 'updateNodeStyle',  property: 'underlined', value: !isUnderlined})
         }
        }
 
@@ -97,7 +120,18 @@ const TabGeneral = () => {
             if (!cursor.style) cursor.style = {fontSize: size + "pt"}
             else cursor.style.fontSize = size + "pt"
             setFontSize(size)
+            const {width, height}= getDimensionsOfNode(cursor)
+            cursor.width = width;
+            cursor.height = height;
             setData([...data])
+            setSizeTimeout((prev) => {
+                clearTimeout(prev)
+                return setTimeout(() => {
+                if (cursor.id)
+                    socket.emit("updateNodeStyle", {path: calculatePath(cursor), property: 'fontSize', value: size + "pt"})
+                else
+                    scheduleUpdate(cursor.temporaryId, {node: cursor, type: 'updateNodeStyle',  property: 'size', value: size})
+            }, 500)})
         }
        }
 
@@ -110,6 +144,10 @@ const TabGeneral = () => {
        }
        const handleTextColorComplete = () => {
         setData([...data])
+        if (cursor.id)
+            socket.emit("updateNodeStyle", {path: calculatePath(cursor), property: 'textColor', value: textColor})
+        else
+            scheduleUpdate(cursor.temporaryId, {node: cursor, type: 'updateNodeStyle',  property: 'textColor', value: textColor})
        }
 
        const handleFillColorChange = (v) => {
@@ -121,7 +159,12 @@ const TabGeneral = () => {
        }
        const handleFillColorComplete = () => {
         setData([...data])
+        if (cursor.id)
+            socket.emit("updateNodeStyle", {path: calculatePath(cursor), property: 'fillColor', value: fillColor})
+        else
+            scheduleUpdate(cursor.temporaryId, {node: cursor, type: 'updateNodeStyle',  property: 'fillColor', value: fillColor})
        }
+       
 
        return (
         <div style={{display:'flex', flexDirection: 'row', justifyContent: 'space-between'}}>

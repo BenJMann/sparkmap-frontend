@@ -99,6 +99,7 @@ const Document = () => {
     };
 
     const getDimensionsOfNode = (node) => {
+        if (node?.text?.startsWith?.("New")) console.log(node)
         const {width, height} = getDimensionsOfText(node.text, {minWidth: nodeStyle.minWidth + 'px', minHeight: nodeStyle.minHeight + 'px', padding: nodeStyle.padding + "px", maxWidth: nodeStyle.maxWidth + "px", ...calculateNodeStyle(node)})
         return {width: width+5, height}
     }
@@ -388,7 +389,8 @@ const Document = () => {
         username,
         editContainerDimensions,
         totalDimensions,
-        scrollNodeIntoPosition
+        scrollNodeIntoPosition,
+        scheduleUpdate
      }
     
 
