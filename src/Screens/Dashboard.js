@@ -8,14 +8,89 @@ import { LoginContext } from "../LoginProvider";
 
 import CSVReader from "./CSVReader";
 
+import { Link } from "@mui/material";
+
+import { DataGrid, GridActionsCellItem, GRID_STRING_COL_DEF } from '@mui/x-data-grid';
+
+import { IconButton } from "@mui/material"
+import { MoreVert } from "@mui/icons-material";
+
+import Popover from "@mui/material/Popover";
+
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+
+import RenameDialog from "./RenameDialog";
+import DeleteDocumentDialog from "./DeleteDocumentDialog";
+
+function DocumentPopover({row, setDocumentToEdit, setRenameDialogOpen, setDeleteDialogOpen}) {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleRename = () => {
+    setDocumentToEdit(row)
+    setRenameDialogOpen(true)
+    handleClose()
+  }
+
+  const handleDelete = () => {
+    setDocumentToEdit(row)
+    setDeleteDialogOpen(true);
+    handleClose();
+  }
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
+  return (
+    <div>
+      <IconButton style={{display: 'flex', flexDirection: 'row'}} aria-describedby={id} variant="contained" onClick={handleClick}>
+      <MoreVert />
+      </IconButton>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <List
+        >
+            <ListItem>
+                <ListItemButton>
+                    <ListItemText primary="Rename" onClick={handleRename} />
+                </ListItemButton>
+            </ListItem>
+            <ListItem>
+                <ListItemButton>
+                    <ListItemText primary="Delete" onClick={handleDelete} />
+                </ListItemButton>
+            </ListItem>
+        </List>
+      </Popover>
+    </div>
+  );
+}
+
+
 function Dashboard() {
     const [documents, setDocuments] = useState([])
     const [showPopup, setShowPopup] = useState(false);
     const [documentName, setDocumentName] = useState("");
 
     const [showImportPopup, setShowImportPopup] = useState(false)
-
-    const [delimeter, setDelemiter] = useState(",")
 
     const [nestedJSON, setNestedJSON] = useState(null)
 
@@ -24,6 +99,57 @@ function Dashboard() {
 
     const {socket, socketLoaded} = useContext(WebsocketsContext);
     const {loggedIn} = useContext(LoginContext);
+
+    const [documentToEdit, setDocumentToEdit] = useState(null)
+    const [renameDialogOpen, setRenameDialogOpen] = useState(false)
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+
+    const renameDocument = (documentId, newDocumentName) => {
+        socket.emit('renameDocument', {documentId, newDocumentName})
+    }
+
+    const deleteDocument = (documentId) => {
+        socket.emit('deleteDocument', {documentId})
+    }
+
+    const LinkCell = (props) => {
+        return (
+            <Link href={`/document/${props.row.documentId}`}>{props.value}</Link>
+        )
+    }
+    
+    const ActionsCell = (props) => {
+        return (
+            <DocumentPopover {...props} setDocumentToEdit={setDocumentToEdit} setRenameDialogOpen={setRenameDialogOpen} 
+            setDeleteDialogOpen={setDeleteDialogOpen}/>
+        )
+    }
+    
+    const linkColumnType = {
+        ...GRID_STRING_COL_DEF,
+        type: 'custom',
+        resizable: false,
+        filterable: false,
+        sortable: false,
+        editable: false,
+        groupable: false,
+        display: 'flex',
+        renderCell: (params) => <LinkCell {...params} />,
+      };
+
+      const actionColumnType = {
+        ...GRID_STRING_COL_DEF,
+        type: 'custom',
+        resizable: false,
+        filterable: false,
+        sortable: false,
+        editable: false,
+        groupable: false,
+        display: 'flex',
+        renderCell: (params) => <ActionsCell {...params} />,
+      };
+
+
     const createNew = () => {
         socket.emit("newDocument", {name: documentName})
         setShowPopup(false);
@@ -75,8 +201,26 @@ function Dashboard() {
             })
         }
     }, [socketLoaded, loggedIn])
+      
+      const columns = [
+        { field: 'documentName', headerName: 'Document', width: 350, ...linkColumnType
+         },
+        { field: 'lastModified', headerName: 'Modified', width: 150 },
+        { field: 'actions', headerName: 'Actions', width: 250, ...actionColumnType }
+      ];
+
+
     return (
         <>
+        {renameDialogOpen && 
+        <RenameDialog open={renameDialogOpen} setOpen={setRenameDialogOpen}
+            documentId={documentToEdit.documentId} documentName={documentToEdit.documentName}
+            renameDocument={renameDocument}
+            />}
+        {deleteDialogOpen &&
+        <DeleteDocumentDialog open={deleteDialogOpen} setOpen={setDeleteDialogOpen} 
+            documentId={documentToEdit.documentId} documentName={documentToEdit.documentName} 
+            deleteDocument={deleteDocument}/>}
         {showPopup && <div className="popup">
             <div style={{display: 'flex', 'flexDirection': 'column', justifyContent: 'center', alignItems: 'center'}}>
             <h4>Document Name</h4>
@@ -105,18 +249,21 @@ function Dashboard() {
 
         </div>}
                 <div style={{display:'flex', flexDirection:'row'}}>
-            <div className="documents">
+            <div className="documents" style={{width: '80%'}}>
                 <div className="documentsHeader">
                     <h3>Documents</h3>
                 </div>
-                <div className="documentsList">
+                {/* <div className="documentsList">
                     {documents.map((d) =>
                         <div className="documentRow" onClick={() => {navigate('/document/'+d.documentId)}}>
                             <div className="name">{d.documentName}</div>
                             <div className="lastEdited">{d.lastModified}</div>
                         </div>
                     )}
-                </div>
+                </div> */}
+                <div style={{ height: 300, width: '100%' }}>
+                    <DataGrid rows={documents} getRowId={(r) => r.documentId} columns={columns} />
+                 </div>
                 <button onClick={() => setShowPopup(true)} >New</button>
             </div>
             <div>
