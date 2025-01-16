@@ -7,6 +7,7 @@ export const WebsocketsContext = createContext(null)
 const WebsocketsProvider = () => {
     const socket = useRef(null);
     const [socketLoaded, setSocketLoaded] = useState(false)
+    const [socketDisconnected, setSocketDisconnected] = useState(false)
 
     useEffect(() => {
         if (!socketLoaded) {
@@ -17,7 +18,9 @@ const WebsocketsProvider = () => {
 
     const data = {
         socket: socket.current,
-        socketLoaded
+        socketLoaded,
+        socketDisconnected,
+        setSocketDisconnected
     }
     
     return <WebsocketsContext.Provider value={data}><Outlet /></WebsocketsContext.Provider>

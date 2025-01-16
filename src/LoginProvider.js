@@ -11,13 +11,17 @@ export const LoginContext = createContext(null)
 
 const LoginProvider = () => {
     const [loggedIn, setLoggedIn] = useState(false);
-    const {socket, socketLoaded} = useContext(WebsocketsContext)
+    const {socket, socketLoaded, setSocketDisconnected, socketDisconnected} = useContext(WebsocketsContext)
     const [un, setUn] = useState(null);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         if (socketLoaded) {
+            socket.removeAllListeners("disconnect")
+            socket.on("disconnect", () => {
+                setSocketDisconnected(true)
+            })
             socket.removeAllListeners("loggedIn");
             socket.on("loggedIn", (reload) => {
                 if (!reload)
@@ -29,8 +33,19 @@ const LoginProvider = () => {
                 navigate("/")
                 setLoggedIn(false)
             })
+            socket.removeAllListeners("recovered")
+            socket.on("recovered", () => {
+                if (sessionStorage.getItem('token')) {
+                    const token = sessionStorage.getItem('token')
+                    socket.emit("recoveredLogin", {token: token.split("BEARER ")[1]})
+                }
+            })
+            socket.removeAllListeners("recoveredLoggedIn")
+            socket.on("recoveredLoggedIn", () => {
+                setSocketDisconnected(false);
+            })
         }
-    }, [socketLoaded])
+    }, [socketLoaded, socketDisconnected])
 
 
     const login = async (username, password) => {
@@ -45,7 +60,6 @@ const LoginProvider = () => {
             socket.emit("login", {token: result.data.accessToken})
         }
     }
-
     const logout = () => {
             sessionStorage.removeItem("token");
             socket.emit("logOut")

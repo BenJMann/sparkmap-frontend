@@ -4,7 +4,7 @@ import { LoginContext } from "../../LoginProvider"
 import { DocumentContext } from "./Document";
 
 const DocumentSocket = () => {
-    const {socket, socketLoaded} = useContext(WebsocketsContext);
+    const {socket, socketLoaded, socketDisconnected} = useContext(WebsocketsContext);
     const {loggedIn} = useContext(LoginContext)
     const {data, setData, setWaitingUpdateQueue, waitingUpdateQueue, setUpdatePending, updatePending, calculatePath, setCursor, cursor, documentId, nodeStyle, getDimensionsOfNode, setDocumentName, pasteNode} = useContext(DocumentContext)
 
@@ -77,14 +77,10 @@ const DocumentSocket = () => {
     }, [socketLoaded, loggedIn])
 
 
-    const [socketDisconnected, setSocketDisconnected] = useState(false)
+
 
     useEffect(() => {
         if (socketLoaded) {
-            socket.removeAllListeners("disconnect")
-            socket.on("disconnect", () => {
-                setSocketDisconnected(true)
-            })
             socket.removeAllListeners("newSiblingNodeCreated");
             socket.on("newSiblingNodeCreated", (d) => {
                 const pathResult = resolvePath(d.path);
