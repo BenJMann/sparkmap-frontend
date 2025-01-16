@@ -138,7 +138,7 @@ const DocumentRender = () => {
                                         } setCursor(row);
                                     }} 
                                     className={"cell " + (cursor===row ? 'selected ' : '') + (row.locked ? 'lockedCell' : (row.creator === username ? 'myCell' : 'yourCell'))} 
-                                    style={{left: row.xPx, top: row.yPx, height: row.height, width: row.width, ...calculateNodeStyle(row) }}
+                                    style={{left: row.xPx, top: row.yPx, height: row.height, width: row.width, ...calculateNodeStyle(row), ...(row.copying ? {border: '2px solid red'} : {}) }}
                                     >
                                         <div className="cellText" style={{position: 'relative', padding: nodeStyle.padding}}>{row.text}
                                         </div>

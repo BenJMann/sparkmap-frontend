@@ -18,7 +18,9 @@ const DocumentKeys = forwardRef(({children}, ref) => {
         totalDimensions,
         screenDimensions,
         screenPosition,
-        setScreenPosition} = useContext(DocumentContext)
+        setScreenPosition,
+        copyNode,
+        pasteNode} = useContext(DocumentContext)
     const handleKeyDown = useCallback((event) => {
         if (event.ctrlKey) {
             if (event.key === "e") {
@@ -29,6 +31,12 @@ const DocumentKeys = forwardRef(({children}, ref) => {
             }
             else if (event.key === "Delete") {
                 deleteCell(cursor)
+            }
+            else if (event.key === "x" && !isEditing) {
+                copyNode();
+            }
+            else if ((event.key === "v" || event.key === "V") && !isEditing) {
+                pasteNode(event.shiftKey, cursor)
             }
             if (event.shiftKey) {
                 if (event.key === 'Enter') {
@@ -70,6 +78,7 @@ const DocumentKeys = forwardRef(({children}, ref) => {
                     createChildNode(cursor.parent)
                 }
                 else {
+                    console.log(cursor)
                     if (!cursor.locked)
                         editCell(cursor, cursor.text)
                 }

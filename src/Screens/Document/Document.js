@@ -76,6 +76,92 @@ const Document = () => {
     const [windowSize, setWindowSize] = useState({width: 0, height: 0});
     const [editContainerDimensions, setEditContainerDimensions] = useState({width: 0, height: 0})
 
+    const [nodeToCopy, setNodeToCopy] = useState(null)
+
+    const isNodeParentOf = (node, parent) => {
+        let curNode = node;
+        while (curNode.parent) {
+            if (curNode === parent) return true
+            else curNode = curNode.parent
+        }
+        return false
+    }
+
+    const copyNode = () => {
+        setNodeToCopy(cursor)
+
+        const markAsCopying = (node) => {
+            node.copying = true
+            if (node.children) {
+                node.children.forEach((n) => markAsCopying(n))
+            }
+        }
+        markAsCopying(cursor)
+    }
+
+    const pasteNode = (before, to, from) => {
+        const nodeFrom = from || nodeToCopy;
+    
+        if (!nodeFrom) {
+            console.error("No source node provided for pasting.");
+            return;
+        }
+    
+        // Unmark copying state if no source node (`from`) is provided
+        if (!from) {
+            const unmarkAsCopying = (node) => {
+                node.copying = false;
+                if (node.children) {
+                    node.children.forEach(unmarkAsCopying);
+                }
+            };
+            unmarkAsCopying(nodeToCopy);
+        }
+    
+        // Prevent pasting a node as a child of itself
+        if (isNodeParentOf(to, nodeFrom)) {
+            console.log("Cannot paste a node into one of its descendants.");
+            setData([...data]); // Force a re-render in case of UI feedback
+            return;
+        }
+    
+        const toParent = to.parent;
+        const fromParent = nodeFrom.parent;
+    
+        // Find insertion and removal indices
+        const toIdx = toParent.children.indexOf(to) + (!before ? 1 : 0);
+        const fromIdx = fromParent.children.indexOf(nodeFrom);
+    
+        if (toIdx === -1 || fromIdx === -1) {
+            console.error("Invalid node indices for paste operation.");
+            return;
+        }
+    
+        if (fromParent === toParent) {
+            // Reorder within the same parent
+            const children = [...fromParent.children];
+            const [movedNode] = children.splice(fromIdx, 1); // Remove nodeFrom
+            children.splice(toIdx > fromIdx ? toIdx - 1 : toIdx, 0, movedNode); // Insert at new index
+            fromParent.children = children;
+        } else {
+            // Move node between different parents
+            const [movedNode] = fromParent.children.splice(fromIdx, 1); // Remove from old parent
+            toParent.children.splice(toIdx, 0, movedNode); // Add to new parent
+        }
+    
+        // Reset copying state and update references
+        if (!from) {
+            setNodeToCopy(null);
+            setCursor(nodeFrom);
+        }
+    
+        // Update the data structure and refresh the grid window
+        setData([...data]);
+        setGridWindowRefresh(true);
+
+        socket.emit("pasteNode", {fromPath: calculatePath(nodeFrom), toPath: calculatePath(to), before})
+    };
+    
 
     var getDimensionsOfText = function(text, styles) {
         var isObjectJSON = function(obj) {
@@ -390,7 +476,9 @@ const Document = () => {
         editContainerDimensions,
         totalDimensions,
         scrollNodeIntoPosition,
-        scheduleUpdate
+        scheduleUpdate,
+        copyNode,
+        pasteNode
      }
     
 
