@@ -6,7 +6,7 @@ import { DocumentContext } from "./Document";
 const DocumentSocket = () => {
     const {socket, socketLoaded, socketDisconnected} = useContext(WebsocketsContext);
     const {loggedIn} = useContext(LoginContext)
-    const {data, setData, setWaitingUpdateQueue, waitingUpdateQueue, setUpdatePending, updatePending, calculatePath, setCursor, cursor, documentId, nodeStyle, getDimensionsOfNode, setDocumentName, pasteNode} = useContext(DocumentContext)
+    const {data, setData, setWaitingUpdateQueue, waitingUpdateQueue, setUpdatePending, updatePending, calculatePath, moveCursor, cursor, documentId, nodeStyle, getDimensionsOfNode, setDocumentName, pasteNode} = useContext(DocumentContext)
 
     const runScheduledUpdates = (temporaryId) => {
         if (!updatePending[temporaryId]) return;
@@ -211,7 +211,7 @@ const DocumentSocket = () => {
                     if (children) {
                         parent.children = [...parent.children.slice(0, idx), ...children, ...parent.children.slice(idx+1, parent.children.length)]
                         if (cursorOnNode) {
-                            setCursor(children[0])
+                            moveCursor(children[0])
                         }
                     }
                     else {
@@ -220,7 +220,7 @@ const DocumentSocket = () => {
                         else
                             parent.children = null
             
-                        if (cursorOnNode) setCursor(parent);
+                        if (cursorOnNode) moveCursor(parent);
                     }  
                     setData([...data])
                 } else {

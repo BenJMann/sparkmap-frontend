@@ -75,6 +75,12 @@ const Document = () => {
 
     const [nodeToCopy, setNodeToCopy] = useState(null)
 
+    const moveCursor = (node) => {
+        cursor.dirtyStyles = true;
+        node.dirtyStyles = true;
+        setCursor(node);
+    }
+
     const isNodeParentOf = (node, parent) => {
         let curNode = node;
         while (curNode.parent) {
@@ -149,7 +155,7 @@ const Document = () => {
         // Reset copying state and update references
         if (!from) {
             setNodeToCopy(null);
-            setCursor(nodeFrom);
+            moveCursor(nodeFrom);
         }
     
         // Update the data structure and refresh the grid window
@@ -262,7 +268,7 @@ const Document = () => {
         const temporaryId = getTemporaryId()
         node.parent.children = [...node.parent.children.slice(0, idx + (!before ? 1 : 0)), {text: '', width: nodeStyle.minWidth, height: nodeStyle.minHeight, temporaryId, creator: username}, ...node.parent.children.slice(idx + (!before ? 1 : 0), node.parent.children.length)]
         setData([...data])
-        setCursor(node.parent.children[idx + (!before ? 1 : 0)])
+        moveCursor(node.parent.children[idx + (!before ? 1 : 0)])
         setEditText(key ?? "")
         setIsEditing(true);
         setGridWindowRefresh(true);
@@ -279,7 +285,7 @@ const Document = () => {
         const temporaryId = getTemporaryId()
         node.children = [{text: '', width: nodeStyle.minWidth, height: nodeStyle.minHeight, temporaryId, creator: username}]
         setData([...data])
-        setCursor(node.children[0])
+        moveCursor(node.children[0])
         addToWaitingUpdateQueue(node.children[0])
         setEditText(key ?? "")
         setIsEditing(true);
@@ -294,7 +300,7 @@ const Document = () => {
         const temporaryId = getTemporaryId()
         node.children = [...node.children, {text: '', width: nodeStyle.minWidth, height: nodeStyle.minHeight, temporaryId, creator: username}]
         setData([...data])
-        setCursor(node.children[node.children.length-1])
+        moveCursor(node.children[node.children.length-1])
         addToWaitingUpdateQueue(node.children[node.children.length-1])
         setEditText(key ?? "")
         setIsEditing(true);
@@ -337,7 +343,7 @@ const Document = () => {
         const children = node.children;
         if (children) {
             parent.children = [...parent.children.slice(0, idx), ...children, ...parent.children.slice(idx+1, parent.children.length)]
-            setCursor(children[0])
+            moveCursor(children[0])
         }
         else {
             if (parent.children.length >= 2)
@@ -415,7 +421,7 @@ const Document = () => {
         setUpdatePending,
         updatePending,
         calculatePath,
-        setCursor,
+        moveCursor,
         cursor,
         documentId,
         documentName,
