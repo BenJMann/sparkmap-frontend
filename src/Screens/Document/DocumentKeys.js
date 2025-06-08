@@ -159,10 +159,9 @@ const DocumentKeys = forwardRef(({children}, ref) => {
         createChildNode,
         editCell,
         setIsEditing,
-        setCursor,
+        moveCursor,
         totalDimensions,
         screenDimensions,
-        screenPosition,
         setScreenPosition,
         copyNode,
         pasteNode} = useContext(DocumentContext)
@@ -222,26 +221,26 @@ const DocumentKeys = forwardRef(({children}, ref) => {
 
     const f_moveCursorDown = useCallback(() => {
         if (!isEditing) {
-            if (cursor.nextNode) setCursor(cursor.nextNode)
+            if (cursor.nextNode) moveCursor(cursor.nextNode)
         }
     }, [isEditing, cursor])
 
     const f_moveCursorUp = useCallback(() => {
         if (!isEditing) {
-            if (cursor.prevNode) setCursor(cursor.prevNode)
+            if (cursor.prevNode) moveCursor(cursor.prevNode)
         }
     }, [isEditing, cursor])
 
     const f_moveCursorLeft = useCallback(() => {
         console.log("Running!")
         if (!isEditing) {
-            if (cursor.parent) setCursor(cursor.parent) 
+            if (cursor.parent) moveCursor(cursor.parent) 
         }
     }, [isEditing, cursor])
 
     const f_moveCursorRight = useCallback(() => {
         if (!isEditing) {
-            if (cursor.children) setCursor(cursor.children[0]) 
+            if (cursor.children) moveCursor(cursor.children[0]) 
         }
     }, [isEditing, cursor])
 

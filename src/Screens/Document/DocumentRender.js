@@ -7,7 +7,7 @@ import calculateNodeStyle from "../CalculateNodeStyles";
 const DocumentRender = () => {
     const {data, grid, setGrid, gridWindow, setGridWindow, setGridWindowRefresh,
         screenPosition, screenDimensions, setTotalDimensions,
-        setCursor, cursor,
+        moveCursor, cursor,
         isEditing, editText,
         browseModifier, setHoveredNode, updateNodeText,
         nodeStyle,username
@@ -83,7 +83,7 @@ const DocumentRender = () => {
                                 >                                  
                                     <div onClick={() => {
                                         if (isEditing) updateNodeText(cursor, editText);
-                                        setCursor(row);
+                                        moveCursor(row);
                                     }} 
                                         className={"cell " + (cursor===row ? 'selected ' : '') + (row.locked ? 'lockedCell' : (row.creator === username ? 'myCell' : 'yourCell'))} 
                                         style={{left: row.xPx, top: row.yPx, height: row.height, width: row.width, ...calculateNodeStyle(row), ...(row.copying ? {border: '2px solid red'} : {}) }}
