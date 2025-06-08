@@ -76,7 +76,8 @@ const Document = () => {
     const [nodeToCopy, setNodeToCopy] = useState(null)
 
     const moveCursor = (node) => {
-        cursor.dirtyStyles = true;
+        if (cursor)
+            cursor.dirtyStyles = true;
         node.dirtyStyles = true;
         setCursor(node);
     }
