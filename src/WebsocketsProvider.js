@@ -4,6 +4,8 @@ import { Outlet } from 'react-router-dom';
 
 export const WebsocketsContext = createContext(null)
 
+const wsURL = process.env.REACT_APP_API.slice(-1) === '/' ? process.env.REACT_APP_API.slice(0, -1) : process.env.REACT_APP_API
+
 const WebsocketsProvider = () => {
     const socket = useRef(null);
     const [socketLoaded, setSocketLoaded] = useState(false)
@@ -11,7 +13,7 @@ const WebsocketsProvider = () => {
 
     useEffect(() => {
         if (!socketLoaded) {
-            socket.current = socketIOClient(process.env.REACT_APP_API, {transports: ['websocket']});
+            socket.current = socketIOClient(wsURL, {transports: ['websocket']});
             setSocketLoaded(true)
         }
     }, []);
