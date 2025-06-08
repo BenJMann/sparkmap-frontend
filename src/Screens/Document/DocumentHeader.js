@@ -1,4 +1,4 @@
-import { ShareAlt, Table } from "@styled-icons/fa-solid"
+import { ShareAlt } from "@styled-icons/fa-solid"
 import { useState } from "react"
 import TabLeft from '../../Images/tab_left.png'
 import TabRight from '../../Images/tab_right.png'
@@ -6,14 +6,12 @@ import TabLeftSelected from '../../Images/tab_left_selected.png'
 import TabRightSelected from '../../Images/tab_right_selected.png'
 import TabGeneral from "./HeaderTabs/TabGeneral"
 
-
-
 const DocumentHeader = ({setShowSharePopup}) => {
 
     const [currentTab, setCurrentTab] = useState(0)
 
     const tabs = [
-        {id: 0, name: "General", tab: <TabGeneral />},
+        {id: 0, name: "Format", tab: <TabGeneral />},
         {id: 1, name: "Edit"},
         {id: 3, name: "Insert"},
         {id: 4, name: "Document"}
@@ -21,7 +19,7 @@ const DocumentHeader = ({setShowSharePopup}) => {
     return <div className="documentHeader">
         <div className="documentHeaderTabs">
             {tabs.map((tab) => 
-                <div className="headerTab" onClick={() => setCurrentTab(tab.id)}>
+                <div key={tab.name} className="headerTab" onClick={() => setCurrentTab(tab.id)}>
                     <img src={tab.id === currentTab ? TabLeftSelected : TabLeft} />
                     <div className={"headerTab_inner" + (tab.id === currentTab ? '_selected' : '')}>
                         {tab.name}

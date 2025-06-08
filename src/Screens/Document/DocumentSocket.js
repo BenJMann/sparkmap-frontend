@@ -29,8 +29,8 @@ const DocumentSocket = () => {
 
             else if (upd.type === 'deleteCell') {
                 const childrenWithoutIds = upd.children ? upd.children.filter((c) => !c.id) : []
-            if (upd.node.id && childrenWithoutIds.length === 0)
-                socket.emit("deleteCell", {path: calculatePath(upd.node), parent: upd.parent.id})
+                if (upd.node.id && childrenWithoutIds.length === 0)
+                    socket.emit("deleteCell", {path: calculatePath(upd.node), parent: upd.parent.id})
             }
         })
 
@@ -240,7 +240,7 @@ const DocumentSocket = () => {
                 if (pathResultFrom.status === "success" && pathResultTo.status === "success") {
                     const fromNode = pathResultFrom.node;
                     const toNode = pathResultTo.node;
-                    pasteNode(d.before, toNode, fromNode)
+                    pasteNode(toNode, fromNode, d.before, d.child)
                 }
             })
         }

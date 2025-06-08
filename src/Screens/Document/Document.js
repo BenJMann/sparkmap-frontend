@@ -59,9 +59,6 @@ const Document = () => {
 
     const [gridWindowRefresh, setGridWindowRefresh] = useState(false)
 
-    const [browseModifier, setBrowseModifier] = useState(false);
-    const [screenPosBeforeBrowseModifierChange, setScreenPosBeforeBrowseModifierChange] = useState(null)
-
     const [hoveredNode, setHoveredNode] = useState(null);
 
     const [isNewNode, setIsNewNode] = useState(false);
@@ -99,7 +96,7 @@ const Document = () => {
         markAsCopying(cursor)
     }
 
-    const pasteNode = (before, to, from) => {
+    const pasteNode = (to, from, before, child) => {
         const nodeFrom = from || nodeToCopy;
     
         if (!nodeFrom) {
@@ -163,23 +160,23 @@ const Document = () => {
     };
     
 
-    var getDimensionsOfText = function(text, styles) {
-        var isObjectJSON = function(obj) {
+    const getDimensionsOfText = function(text, styles) {
+        const isObjectJSON = function(obj) {
             return obj && typeof obj === 'object' && !Array.isArray(obj);
         };
     
-        var element = document.createElement('div');
+        const element = document.createElement('div');
         if (isObjectJSON(styles)) {
-            var styleKeys = Object.keys(styles);
-            for (var i = 0, n = styleKeys.length; i < n; ++i) {
+            const styleKeys = Object.keys(styles);
+            for (let i = 0, n = styleKeys.length; i < n; ++i) {
                 element.style[styleKeys[i]] = styles[styleKeys[i]];
             }
         }
         element.style.display = 'inline-block';
         element.innerHTML = text;
         document.body.appendChild(element);
-        var width = element.offsetWidth;
-        var height = element.offsetHeight;
+        const width = element.offsetWidth;
+        const height = element.offsetHeight;
         document.body.removeChild(element);
         return {width, height};
     };
@@ -390,17 +387,6 @@ const Document = () => {
         setScreenDimensions({width, height})
     }, [windowSize])
 
-  
-
-    
-
-    useEffect(() => {
-        if (screenPosBeforeBrowseModifierChange && !gridWindowRefresh) {
-            scrollNodeIntoPosition(cursor, screenPosBeforeBrowseModifierChange)
-            setScreenPosBeforeBrowseModifierChange(null)
-        }
-    }, [screenPosBeforeBrowseModifierChange, gridWindowRefresh])
-
 
     useEffect(() => {
         if (isEditing && !gridWindowRefresh) {
@@ -421,16 +407,6 @@ const Document = () => {
         }
       }, [cursor])
 
-    
-
-     useEffect(() => {
-        if (!browseModifier) {
-            if (cursor && cursor.type === 'placeholder')
-                setCursor(cursor.before ? cursor.nextNode : cursor.prevNode)
-            else if (cursor && cursor.type === 'childPlaceholder') setCursor(cursor.parent);
-        }
-     }, [browseModifier])
-
      const docCtxt = {
         data,
         setData,
@@ -446,13 +422,10 @@ const Document = () => {
         setDocumentName,
         nodeStyle,
         getDimensionsOfNode,
-        setScreenPosBeforeBrowseModifierChange,
         isEditing,
         editText,
-        browseModifier,
         getNodeScreenPosition,
         setGridWindowRefresh,
-        setBrowseModifier,
         deleteCell,
         updateNodeText,
         isNewNode,
@@ -489,14 +462,14 @@ const Document = () => {
             <SharePopup show={showSharePopup} onHide={() => setShowSharePopup(false)}/>
             <DocumentSocket  />
             <div className="documentContainer">
-            <img src={Background} width={screenDimensions.width} height={screenDimensions.height} style={{position: 'absolute'}}/>
+            <img alt="" src={Background} width={screenDimensions.width} height={screenDimensions.height} style={{position: 'absolute'}}/>
             <div className="documentContent">
                         <DocumentKeys
                         getNodeScreenPosition={getNodeScreenPosition}
                         ref={documentRef}
                         >
                             {data.length === 0 ?
-                            <img src={Loading} style={{position: 'absolute', top: (window.innerHeight/2)-150, left: (window.innerWidth/2)-150}} />
+                            <img alt="Loading" src={Loading} style={{position: 'absolute', top: (window.innerHeight/2)-150, left: (window.innerWidth/2)-150}} />
                         :
                         <>
                             <DocumentRender />
