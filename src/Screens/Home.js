@@ -8,6 +8,10 @@ import Science from '@mui/icons-material/Science';
 import Troubleshoot from '@mui/icons-material/Troubleshoot';
 
 import Banner from "../Images/Banner.png";
+import Information from "../Images/Information.png"
+import Collaborative from "../Images/Collaborative.png"
+import Updates from "../Images/Updates.png"
+import Beginning from "../Images/Beginning.png"
 
 function Home() {
   return (
@@ -89,15 +93,22 @@ function Home() {
             <Typography sx={{color: '#666', mb: 4}}>
                 Thus begins your journey into the unexplored depths of your own mind. What seems like a simple interface holds immense power. Discover hidden intricacies, subtle connections, and profound insights. See complex topics from new angles. Uncover unexpected relationships. SparkMap isn't just a tool — it's a new way of thinking. You've never seen anything like it.
             </Typography>
-            <Typography sx={{color: '#666', mb: 4}}>
-                At its core, SparkMap is simple: you connect nodes together. It might look like an indented list — but that’s just the surface. Underneath, it’s something richer. With intuitive, purpose-built editing tools, SparkMap lets you build intricate webs of meaning. This isn’t just a list. It’s a living map of connections.
-           </Typography>
-            <Typography sx={{color: '#666', mb:4}}>
-                SparkMap shares the spirit of a mind map, though it breaks free from the traditional layout. It draws inspiration from Tony Buzan’s pioneering work, but reimagines it for the digital age. More than just a tool, it’s a new way of thinking — limited only by your imagination.
-           </Typography>
-            <Typography sx={{color: '#666', mb:4}}>
-               You might think of it as an alternative to a spreadsheet — but more visual, more flexible. A new way to store, explore, and evolve your ideas.
-            </Typography>
+            <Grid2 container >
+                <Grid2 item size={7}>
+                  <Typography sx={{color: '#666', mb: 4}}>
+                    At its core, SparkMap is simple: you connect nodes together. It might look like an indented list — but that’s just the surface. Underneath, it’s something richer. With intuitive, purpose-built editing tools, SparkMap lets you build intricate webs of meaning. This isn’t just a list. It’s a living map of connections.
+                  </Typography>
+                    <Typography sx={{color: '#666', mb:4}}>
+                        SparkMap shares the spirit of a mind map, though it breaks free from the traditional layout. It draws inspiration from Tony Buzan’s pioneering work, but reimagines it for the digital age. More than just a tool, it’s a new way of thinking — limited only by your imagination.
+                  </Typography>
+                    <Typography sx={{color: '#666', mb:4}}>
+                      You might think of it as an alternative to a spreadsheet — but more visual, more flexible. A new way to store, explore, and evolve your ideas.
+                    </Typography>
+                </Grid2>
+                <Grid2 item size={5}>
+                  <img alt="Information" style={{marginLeft: '20px'}} src={Information} width={525} height={350}/>
+                </Grid2>
+            </Grid2>
     </Box>
     <Box sx={{backgroundColor: '#eaeaea', p:5}}>
             <Grid2 container spacing={2} width='100%'>
@@ -106,6 +117,16 @@ function Home() {
                         <Typography variant="h4" sx={{pb: 3}}>
                             Fully Collaborative
                         </Typography>
+                        <Box sx={{
+                          overflow: 'hidden',
+                          display: 'flex',              // flexbox layout
+                          justifyContent: 'center',     // center horizontally
+                          alignItems: 'center',         // center vertically
+                          width: '100%',
+                          mb: 3
+                        }}>
+                          <img alt="Collaborative" src={Collaborative} width={200} height={200} />
+                        </Box>
                         <Typography>
                             Share, remix, and build together in real time. Whether you're brainstorming with a friend or coordinating with a team, SparkMap makes collaboration seamless — with endless ways to work together.
                         </Typography>
@@ -116,6 +137,16 @@ function Home() {
                         <Typography variant="h4" sx={{pb: 3}}>
                             Regular Updates
                         </Typography>
+                        <Box sx={{
+                          overflow: 'hidden',
+                          display: 'flex',              // flexbox layout
+                          justifyContent: 'center',     // center horizontally
+                          alignItems: 'center',         // center vertically
+                          width: '100%',
+                          mb: 3
+                        }}>
+                          <img alt="Updates" src={Updates} width={200} height={200} />
+                        </Box>
                         <Typography>
                            SparkMap is constantly evolving. New features drop regularly, so check the Docs page to stay up to date. We're always exploring fresh, more effective ways to help you think and create.
                         </Typography>
@@ -126,8 +157,18 @@ function Home() {
                         <Typography variant="h4" sx={{pb: 3}}>
                             Just the beginning
                         </Typography>
+                        <Box sx={{
+                          overflow: 'hidden',
+                          display: 'flex',              // flexbox layout
+                          justifyContent: 'center',     // center horizontally
+                          alignItems: 'center',         // center vertically
+                          width: '100%',
+                          mb: 3
+                        }}>
+                          <img alt="Beginning" src={Beginning} width={200} height={200} />
+                        </Box>
                         <Typography>
-                            This is only the beginning. SparkMap is in its early days, and the roadmap ahead is <b>PACKED</b> with powerful new features, smarter tools, and entirely new ways of working. Big ideas are coming — and you're here at the start.
+                            SparkMap is in its early days, and the roadmap ahead is <b>PACKED</b> with powerful new features, smarter tools, and entirely new ways of working. Big ideas are coming — and you're here at the start.
                         </Typography>
                     </Paper>
                 </Grid2>
