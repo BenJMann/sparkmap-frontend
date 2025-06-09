@@ -9,7 +9,7 @@ function Footer() {
         color: 'white',
         py: 6,
         px: { xs: 3, md: 10 },
-        mt: 10,
+        mt: 0,
       }}
     >
       <Grid2 container spacing={4}>

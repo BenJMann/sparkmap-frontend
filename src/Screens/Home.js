@@ -87,30 +87,49 @@ function Home() {
       </Grid2>
     </Box>
     <Box sx={{backgroundColor: 'white', p:5}}>
-            <Typography variant="h2" sx={{mb:3}} gutterBottom>
-                Welcome to Sparkmap.
-            </Typography>
+      <Typography variant="h2" sx={{mb:3}} gutterBottom>
+          Welcome to Sparkmap.
+      </Typography>
+      <Typography sx={{color: '#666', mb: 4}}>
+          Thus begins your journey into the unexplored depths of your own mind. What seems like a simple interface holds immense power. Discover hidden intricacies, subtle connections, and profound insights. See complex topics from new angles. Uncover unexpected relationships. SparkMap isn't just a tool — it's a new way of thinking. You've never seen anything like it.
+      </Typography>
+      <Grid2 container >
+          <Grid2 item size={7}>
             <Typography sx={{color: '#666', mb: 4}}>
-                Thus begins your journey into the unexplored depths of your own mind. What seems like a simple interface holds immense power. Discover hidden intricacies, subtle connections, and profound insights. See complex topics from new angles. Uncover unexpected relationships. SparkMap isn't just a tool — it's a new way of thinking. You've never seen anything like it.
+              At its core, SparkMap is simple: you connect nodes together. It might look like an indented list — but that’s just the surface. Underneath, it’s something richer. With intuitive, purpose-built editing tools, SparkMap lets you build intricate webs of meaning. This isn’t just a list. It’s a living map of connections.
             </Typography>
-            <Grid2 container >
-                <Grid2 item size={7}>
-                  <Typography sx={{color: '#666', mb: 4}}>
-                    At its core, SparkMap is simple: you connect nodes together. It might look like an indented list — but that’s just the surface. Underneath, it’s something richer. With intuitive, purpose-built editing tools, SparkMap lets you build intricate webs of meaning. This isn’t just a list. It’s a living map of connections.
-                  </Typography>
-                    <Typography sx={{color: '#666', mb:4}}>
-                        SparkMap shares the spirit of a mind map, though it breaks free from the traditional layout. It draws inspiration from Tony Buzan’s pioneering work, but reimagines it for the digital age. More than just a tool, it’s a new way of thinking — limited only by your imagination.
-                  </Typography>
-                    <Typography sx={{color: '#666', mb:4}}>
-                      You might think of it as an alternative to a spreadsheet — but more visual, more flexible. A new way to store, explore, and evolve your ideas.
-                    </Typography>
-                </Grid2>
-                <Grid2 item size={5}>
-                  <img alt="Information" style={{marginLeft: '20px'}} src={Information} width={525} height={350}/>
-                </Grid2>
-            </Grid2>
+              <Typography sx={{color: '#666', mb:4}}>
+                  SparkMap shares the spirit of a mind map, though it breaks free from the traditional layout. It draws inspiration from Tony Buzan’s pioneering work, but reimagines it for the digital age. More than just a tool, it’s a new way of thinking — limited only by your imagination.
+            </Typography>
+              <Typography sx={{color: '#666', mb:4}}>
+                You might think of it as an alternative to a spreadsheet — but more visual, more flexible. A new way to store, explore, and evolve your ideas.
+              </Typography>
+              <Typography sx={{color: '#666', mb:4}}>
+                SparkMap adapts to the way you think. Whether you're planning a project, reflecting on emotions, studying a complex topic, or simply untangling a mess of ideas — it gives your thoughts room to move, breathe, and unfold. You can zoom in on the fine details, or zoom out to see the big picture. Nothing gets lost. Everything connects.  
+              </Typography>
+          </Grid2>
+          <Grid2 item size={5}>
+            <img alt="Information" style={{marginLeft: '20px'}} src={Information} width={525} height={350}/>
+          </Grid2>
+      </Grid2>
+      <Typography sx={{color: '#666', mb:4}}>
+        This flexibility opens doors. Use it solo as a thinking companion, or collaborate in real time with others — building, refining, and remixing ideas together. It’s more than a productivity app. It’s a creative space, a mental canvas, a framework for clarity. Once you start thinking this way, it’s hard to go back.
+      </Typography>
     </Box>
-    <Box sx={{backgroundColor: '#eaeaea', p:5}}>
+    <Box
+      sx={{
+        backgroundColor: '#555',
+        overflow: 'hidden',
+        display: 'flex',              // flexbox layout
+        justifyContent: 'center',     // center horizontally
+        alignItems: 'center',         // center vertically
+      }}
+      >
+      <Typography sx={{p: 5, maxWidth: 550, color: 'white', textAlign: 'center', lineHeight: 2.1}}>
+          <i>"SparkMap has completely changed how I think and take notes. It’s trained me to break ideas into shorter, more precise fragments — even when I’m not using the app, I still think that way. I now write by hand using the same visual structure, which helps me see everything clearly and stay organized. I’ve used it for emotions, to-do lists, even navigating difficult conversations. It helps me get to the core of things — no more messy paragraphs, just clear, connected ideas I can shape and build on."</i> <b> - User</b>
+      </Typography>
+    </Box>
+    <Box sx={{backgroundColor: '#cacaca', p:5}}>
             <Grid2 container spacing={2} width='100%'>
                 <Grid2 size={4}>
                     <Paper sx={{p: 3}}>
