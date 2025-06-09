@@ -10,7 +10,7 @@ import Troubleshoot from '@mui/icons-material/Troubleshoot';
 import Banner from "../Images/Banner.png";
 import Information from "../Images/Information.png"
 import Collaborative from "../Images/Collaborative.png"
-import Updates from "../Images/Updates.png"
+import Updates from "../Images/Updates.jpg"
 import Beginning from "../Images/Beginning.png"
 
 function Home() {
@@ -146,26 +146,6 @@ function Home() {
                 <Grid2 size={4}>
                     <Paper sx={{p: 3}}>
                         <Typography variant="h4" sx={{pb: 3}}>
-                            Fully Collaborative
-                        </Typography>
-                        <Box sx={{
-                          overflow: 'hidden',
-                          display: 'flex',              // flexbox layout
-                          justifyContent: 'center',     // center horizontally
-                          alignItems: 'center',         // center vertically
-                          width: '100%',
-                          mb: 3
-                        }}>
-                          <img alt="Collaborative" src={Collaborative} width={200} height={200} />
-                        </Box>
-                        <Typography>
-                            Share, remix, and build together in real time. Whether you're brainstorming with a friend or coordinating with a team, SparkMap makes collaboration seamless — with endless ways to work together.
-                        </Typography>
-                    </Paper>
-                </Grid2>
-                <Grid2 size={4}>
-                    <Paper sx={{p: 3}}>
-                        <Typography variant="h4" sx={{pb: 3}}>
                             Regular Updates
                         </Typography>
                         <Box sx={{
@@ -176,10 +156,30 @@ function Home() {
                           width: '100%',
                           mb: 3
                         }}>
-                          <img alt="Updates" src={Updates} width={200} height={200} />
+                          <img alt="Updates" src={Updates} width={200} height={200} style={{border: '1px solid black'}} />
                         </Box>
                         <Typography>
                            SparkMap is constantly evolving. New features drop regularly, so check the Docs page to stay up to date. We're always exploring fresh, more effective ways to help you think and create.
+                        </Typography>
+                    </Paper>
+                </Grid2>
+                <Grid2 size={4}>
+                    <Paper sx={{p: 3}}>
+                        <Typography variant="h4" sx={{pb: 3}}>
+                            Fully Collaborative
+                        </Typography>
+                        <Box sx={{
+                          overflow: 'hidden',
+                          display: 'flex',              // flexbox layout
+                          justifyContent: 'center',     // center horizontally
+                          alignItems: 'center',         // center vertically
+                          width: '100%',
+                          mb: 3
+                        }}>
+                          <img alt="Collaborative" src={Collaborative} width={200} height={200} style={{border: '1px solid black'}} />
+                        </Box>
+                        <Typography>
+                            Share, remix, and build together in real time. Whether you're brainstorming with a friend or coordinating with a team, SparkMap makes collaboration seamless — with endless ways to work together.
                         </Typography>
                     </Paper>
                 </Grid2>
@@ -196,7 +196,7 @@ function Home() {
                           width: '100%',
                           mb: 3
                         }}>
-                          <img alt="Beginning" src={Beginning} width={200} height={200} />
+                          <img alt="Beginning" src={Beginning} width={200} height={200} style={{border: '1px solid black'}} />
                         </Box>
                         <Typography>
                             SparkMap is in its early days, and the roadmap ahead is <b>PACKED</b> with powerful new features, smarter tools, and entirely new ways of working. Big ideas are coming — and you're here at the start.
