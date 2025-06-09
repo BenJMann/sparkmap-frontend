@@ -1,7 +1,5 @@
 import React, { useCallback, forwardRef, useContext, useState, useMemo } from "react";
 import { DocumentContext } from "./Document";
-import { Edit } from "@styled-icons/fa-solid";
-import { Mode } from "@mui/icons-material";
 
 const Keys = {
     Typable: /^[A-Za-z0-9`=\\[\];',./\- !@#£$%^&*()_+{}|:"<>?~]$/,
