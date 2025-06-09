@@ -12,6 +12,7 @@ import Information from "../Images/Information.png"
 import Collaborative from "../Images/Collaborative.png"
 import Updates from "../Images/Updates.jpg"
 import Beginning from "../Images/Beginning.png"
+import gridBG from "../Images/gridBG.jpg"
 
 function Home() {
   return (
@@ -136,7 +137,7 @@ function Home() {
   {/* Background image */}
   <Box
     component="img"
-    src="/gridBG.jpg"
+    src={gridBG}
     alt="Background"
     sx={{
       position: 'absolute',
