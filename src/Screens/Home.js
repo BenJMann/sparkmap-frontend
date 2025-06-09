@@ -88,7 +88,7 @@ function Home() {
     </Box>
     <Box sx={{backgroundColor: 'white', p:5}}>
       <Typography variant="h2" sx={{mb:3}} gutterBottom>
-          Welcome to Sparkmap.
+          Welcome to SparkMap.
       </Typography>
       <Typography sx={{color: '#666', mb: 4}}>
           Thus begins your journey into the unexplored depths of your own mind. What seems like a simple interface holds immense 
@@ -123,27 +123,56 @@ function Home() {
           </Grid2>
       </Grid2>
     </Box>
-    <Box
-      sx={{
-        backgroundImage: 'url("/gridBG.jpg")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        overflow: 'hidden',
-        display: 'flex',              // flexbox layout
-        justifyContent: 'center',     // center horizontally
-        alignItems: 'center',         // center vertically
-      }}
-      >
-      <Typography sx={{p: 5, maxWidth: 550, color: 'white', textAlign: 'center', lineHeight: 2.1}}>
-          <i>"SparkMap has completely changed how I think and take notes. 
-            It’s trained me to break ideas into shorter, more precise fragments — 
-            even when I’m not using the app, I still think that way. I now write by hand using the same 
-            visual structure, which helps me see everything clearly and stay organized. I’ve used it for 
-            emotions, to-do lists, even navigating difficult conversations. It helps me get to the core of 
-            things — no more messy paragraphs, just clear, connected ideas I can shape and build on."</i> <b> - Elizabeth Paz</b>
-      </Typography>
-    </Box>
+<Box
+  sx={{
+    position: 'relative',
+    height: 350,
+    overflow: 'hidden',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }}
+>
+  {/* Background image */}
+  <Box
+    component="img"
+    src="/gridBG.jpg"
+    alt="Background"
+    sx={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      zIndex: 0,
+    }}
+  />
+
+  {/* Foreground content */}
+  <Typography
+    sx={{
+      p: 5,
+      maxWidth: 550,
+      color: 'white',
+      textAlign: 'center',
+      lineHeight: 2.1,
+      position: 'relative',
+      zIndex: 1,
+    }}
+  >
+    <i>
+      "SparkMap has completely changed how I think and take notes. It’s trained me to break ideas into
+      shorter, more precise fragments — even when I’m not using the app, I still think that way. I now
+      write by hand using the same visual structure, which helps me see everything clearly and stay
+      organized. I’ve used it for emotions, to-do lists, even navigating difficult conversations. It helps
+      me get to the core of things — no more messy paragraphs, just clear, connected ideas I can shape and
+      build on."
+    </i>{' '}
+    <b>- Elizabeth Paz</b>
+  </Typography>
+</Box>
+
     <Box sx={{backgroundColor: '#cacaca', p:5}}>
             <Grid2 container spacing={2} width='100%'>
                 <Grid2 size={4}>
