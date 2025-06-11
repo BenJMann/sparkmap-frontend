@@ -113,12 +113,12 @@ function DashboardTable({documents, setRowActionDialog}) {
         { field: 'documentName', headerName: 'Document', width: 750, ...linkColumnType
          },
         { field: 'lastModified', headerName: 'Modified', width: 250 },
-        { field: 'actions', headerName: 'Actions', width: 250, ...actionColumnType }
+        { field: 'actions', headerName: 'Actions', width: 50, ...actionColumnType }
       ];
 
 
     return (
-        <div style={{ height: 300, width: '100%' }}>
+        <div style={{ height: 400, width: 1200, padding: 30 }}>
             <DataGrid rows={documents} getRowId={(r) => r.documentId} columns={columns} />
         </div>
     )

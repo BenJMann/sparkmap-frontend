@@ -3,30 +3,34 @@ import { useEffect, useState, useContext } from "react"
 import { useNavigate } from "react-router-dom";
 
 import { WebsocketsContext } from "../../WebsocketsProvider"
-
 import { LoginContext } from "../../LoginProvider";
 
-import CSVReader from "../CSVReader";
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 
 import RenameDialog from "./RenameDialog";
 import DeleteDocumentDialog from "./DeleteDocumentDialog";
 import NewDocumentDialog from "./NewDocumentDialog";
+import UploadCSVDialog from "./UploadCSVDialog";
 
 import DashboardTable from "./DashboardTable";
+import LeftBar from "./LeftBar";
+import DashboardMenu from "./DashboardMenu";
 
 
 function Dashboard() {
+    const navigate = useNavigate();
+
+    const {socket, socketLoaded} = useContext(WebsocketsContext);
+    const {loggedIn} = useContext(LoginContext);
+
+    const [documentToEdit, setDocumentToEdit] = useState(null)
+
     const [documents, setDocuments] = useState([])
     const [showNewPopup, setShowNewPopup] = useState(false);
     const [showImportPopup, setShowImportPopup] = useState(false)
     const [showRenameDialog, setShowRenameDialog] = useState(false)
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-
-
-    const [documentName, setDocumentName] = useState("");
-
-
-    const [nestedJSON, setNestedJSON] = useState(null)
 
     const setRowActionDialog = (action, row) => {
     setDocumentToEdit(row);
@@ -36,13 +40,6 @@ function Dashboard() {
         setShowDeleteDialog(true);
   }
 
-    const navigate = useNavigate();
-
-    const {socket, socketLoaded} = useContext(WebsocketsContext);
-    const {loggedIn} = useContext(LoginContext);
-
-    const [documentToEdit, setDocumentToEdit] = useState(null)
-
     const renameDocument = (documentId, newDocumentName) => {
         socket.emit('renameDocument', {documentId, newDocumentName})
     }
@@ -50,42 +47,15 @@ function Dashboard() {
     const deleteDocument = (documentId) => {
         socket.emit('deleteDocument', {documentId})
     }
-
-
+    
     const createNew = (documentName) => {
         socket.emit("newDocument", {name: documentName})
         setShowNewPopup(false);
     }
 
-    const loadCSV = () => {
+    const loadCSV = (documentName, nestedJSON) => {
         socket.emit("loadCSV", {name: documentName, json: JSON.stringify(nestedJSON)})
     }
-
-    function gridToNestedJSON(grid) {
-        const root = [];
-        const stack = [{ level: -1, children: root }];
-      
-        for (const row of grid) {
-          // Find the first non-empty cell and its level
-          const level = row.findIndex(cell => cell !== undefined && cell !== null && cell !== '');
-          if (level === -1) continue;
-      
-          const node = { text: row[level], children: [] };
-      
-          // Find the appropriate parent based on the current level
-          while (stack.length > 0 && stack[stack.length - 1].level >= level) {
-            stack.pop();
-          }
-      
-          // Add the node to the parent's children
-          stack[stack.length - 1].children.push(node);
-      
-          // Push the current node onto the stack
-          stack.push({ level, children: node.children });
-        }
-      
-        setNestedJSON(root)
-      }
 
     useEffect(() => {
         if (socketLoaded  && loggedIn) {
@@ -107,34 +77,35 @@ function Dashboard() {
 
     return (
         <>
-        {showRenameDialog && 
-        <RenameDialog open={showRenameDialog} setOpen={setShowRenameDialog}
-            documentId={documentToEdit.documentId} documentName={documentToEdit.documentName}
-            renameDocument={renameDocument}
-            />}
-        {showDeleteDialog &&
-        <DeleteDocumentDialog open={showDeleteDialog} setOpen={setShowDeleteDialog} 
-            documentId={documentToEdit.documentId} documentName={documentToEdit.documentName} 
-            deleteDocument={deleteDocument}/>}
-        {showNewPopup && 
+          <RenameDialog open={showRenameDialog} setOpen={setShowRenameDialog}
+              documentId={documentToEdit?.documentId} 
+              documentName={documentToEdit?.documentName}
+              renameDocument={renameDocument}
+              />
+          <DeleteDocumentDialog open={showDeleteDialog} setOpen={setShowDeleteDialog} 
+              documentId={documentToEdit?.documentId} 
+              documentName={documentToEdit?.documentName} 
+              deleteDocument={deleteDocument}/>
           <NewDocumentDialog open={showNewPopup} setOpen={setShowNewPopup} createNewDocument={createNew} />
-        }
-
-        {showImportPopup && <div className="popup2">
-            <div style={{display: 'flex', 'flexDirection': 'column', justifyContent: 'center', alignItems: 'center'}}>
-            <h4>CSV File</h4>
-            <CSVReader callback={gridToNestedJSON}/>
-            <h4>New Document Name To create:</h4>
-            <input value={documentName} onChange={(e) => {setDocumentName(e.target.value)}} type="text" style={{width: '300px'}} />
-            <div style={{display: 'flex', flexDirection: 'row', marginTop: '10px'}}>
-            <button onClick={() => setShowImportPopup(false)}>Cancel</button>
-            <button onClick={loadCSV}>Confirm</button>
-            </div>
-   
-            </div>
-
-        </div>}
-                <div style={{display:'flex', flexDirection:'row'}}>
+          <UploadCSVDialog open={showImportPopup} setOpen={setShowImportPopup} loadCSV={loadCSV} />
+          
+          <Stack direction="row">
+            <Box
+              sx={{
+                width: '300px',
+                borderRight: '1px solid black',
+              }}
+            >
+              <LeftBar />
+            </Box>
+            <Box sx={{
+              width: '100%'
+            }}>
+              <DashboardMenu setShowNewPopup={setShowNewPopup} setShowImportPopup={setShowImportPopup}/>
+              <DashboardTable documents={documents} setRowActionDialog={setRowActionDialog} />
+            </Box>
+          </Stack>
+          {/* <div style={{display:'flex', flexDirection:'row'}}>
             <div className="documents" style={{width: '80%'}}>
                 <div className="documentsHeader">
                     <h3>Documents</h3>
@@ -149,7 +120,7 @@ function Dashboard() {
                     </button>
                 </div>
             </div>
-        </div>
+        </div> */}
         </>
 
 
