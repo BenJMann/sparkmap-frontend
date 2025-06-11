@@ -84,6 +84,22 @@ function DashboardTable({documents, setRowActionDialog}) {
             <DocumentPopover {...props} setRowActionDialog={setRowActionDialog} />
         )
     }
+
+    const DateCell = (props) => {
+      const isoString = props.value;
+      const date = new Date(isoString);
+
+      const pad = n => n.toString().padStart(2, '0');
+
+      const dd = pad(date.getDate());
+      const MM = pad(date.getMonth() + 1);
+      const yy = date.getFullYear().toString().slice(-2);
+      const hh = pad(date.getHours());
+      const mm = pad(date.getMinutes());
+
+      const formatted = `${dd}/${MM}/${yy} - ${hh}:${mm}`;
+      return formatted;
+    }
     
     const linkColumnType = {
         // ...GRID_STRING_COL_DEF,
@@ -95,6 +111,18 @@ function DashboardTable({documents, setRowActionDialog}) {
         groupable: false,
         // display: 'flex',
         renderCell: (params) => <LinkCell {...params} />,
+      };
+
+      const dateColumnType = {
+        // ...GRID_STRING_COL_DEF,
+        type: 'custom',
+        resizable: false,
+        filterable: false,
+        sortable: false,
+        editable: false,
+        groupable: false,
+        // display: 'flex',
+        renderCell: (params) => <DateCell {...params} />,
       };
 
       const actionColumnType = {
@@ -112,7 +140,7 @@ function DashboardTable({documents, setRowActionDialog}) {
       const columns = [
         { field: 'documentName', headerName: 'Document', width: 750, ...linkColumnType
          },
-        { field: 'lastModified', headerName: 'Modified', width: 250 },
+        { field: 'lastModified', headerName: 'Modified', width: 250, ...dateColumnType },
         { field: 'actions', headerName: 'Actions', width: 50, ...actionColumnType }
       ];
 
