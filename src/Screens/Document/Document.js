@@ -167,32 +167,64 @@ const Document = () => {
     };
     
 
-    const getDimensionsOfText = function(text, styles) {
-        const isObjectJSON = function(obj) {
-            return obj && typeof obj === 'object' && !Array.isArray(obj);
-        };
+const getDimensionsOfText = function(text, styles) {
+    // Create a measurement container that matches your real node environment
+    const container = document.createElement('div');
+    container.style.position = 'absolute';
+    container.style.visibility = 'hidden';
+    container.style.left = '-9999px';
+    container.style.whiteSpace = 'pre-wrap'; // Preserve whitespace but wrap
     
-        const element = document.createElement('div');
-        if (isObjectJSON(styles)) {
-            const styleKeys = Object.keys(styles);
-            for (let i = 0, n = styleKeys.length; i < n; ++i) {
-                element.style[styleKeys[i]] = styles[styleKeys[i]];
-            }
-        }
-        element.style.display = 'inline-block';
-        element.innerHTML = text;
-        document.body.appendChild(element);
-        const width = element.offsetWidth;
-        const height = element.offsetHeight;
-        document.body.removeChild(element);
-        return {width, height};
-    };
+    // Apply all base styles that your actual nodes use
+    container.style.fontFamily = 'inherit'; // Or your specific font
+    container.style.fontSize = 'inherit';   // Or your specific size
+    container.style.lineHeight = 'normal';  // Or your specific line height
+    container.style.boxSizing = 'border-box';
+    
+    // Create the measurement element
+    const element = document.createElement('div');
+    element.style.display = 'inline-block';
+    element.innerHTML = text;
+    container.appendChild(element);
+    document.body.appendChild(container);
+
+
+    // Apply custom styles
+    if (styles && typeof styles === 'object' && !Array.isArray(styles)) {
+        Object.assign(element.style, styles);
+    }
+    
+
+    
+    // Force layout calculation
+    const width = Math.ceil(element.offsetWidth);
+    const height = Math.ceil(element.offsetHeight);
+    
+    // Clean up
+    document.body.removeChild(container);
+    
+    return {width, height};
+};
 
     const getDimensionsOfNode = (node) => {
-        if (node?.text?.startsWith?.("New")) console.log(node)
-        const {width, height} = getDimensionsOfText(node.text, {minWidth: nodeStyle.minWidth + 'px', minHeight: nodeStyle.minHeight + 'px', padding: nodeStyle.padding + "px", maxWidth: nodeStyle.maxWidth + "px", ...calculateNodeStyle(node)})
-        return {width: width+5, height}
-    }
+        const nodeStyles = {
+            minWidth: nodeStyle.minWidth + 'px',
+            minHeight: nodeStyle.minHeight + 'px',
+            padding: nodeStyle.padding + 'px',
+            maxWidth: nodeStyle.maxWidth + 'px',
+            fontFamily: "'Roboto', sans-serif",
+            fontSize: '11pt',
+            ...calculateNodeStyle(node)
+        };
+        
+        const {width, height} = getDimensionsOfText(node.text, nodeStyles);
+        
+        // Add buffer if needed (adjust these values based on your testing)
+        return {
+            width: Math.ceil(width * 1.05),  // 5% buffer
+            height: Math.ceil(height * 1.1)   // 10% buffer for line height variations
+        };
+    };
 
     const scrollNodeIntoView = (node) => {
         const left = node.xPx;
