@@ -7,7 +7,7 @@ import { PrivateRoute } from './Security.js';
 
 import Login from "./Screens/Login.js"
 import Logout from './Screens/Logout.js';
-import Dashboard from "./Screens/Dashboard.js"
+import Dashboard from "./Screens/Dashboard/Dashboard.js"
 import Home from './Screens/Home.js';
 import Interface from './Screens/Interface.js';
 import Document from './Screens/Document/Document.js';
