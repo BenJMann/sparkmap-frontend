@@ -1,5 +1,6 @@
 import React, { useCallback, forwardRef, useContext, useState, useMemo } from "react";
 import { DocumentContext } from "./Document";
+import { TruckFieldUn } from "@styled-icons/fa-solid";
 
 const Keys = {
     Typable: /^[A-Za-z0-9`=\\[\];',./\- !@#£$%^&*()_+{}|:"<>?~]$/,
@@ -24,8 +25,8 @@ const Keys = {
     CapsLock: "CapsLock",
     NumLock: "NumLock",
     ScrollLock: "ScrollLock",
-    x: "x",
-    v: "v"
+    x: /[xX]/,
+    v: /[vV]/
 }
 
 const Modifiers = {
@@ -54,6 +55,10 @@ const KeyManager = forwardRef(({functions, screenDimensions, totalDimensions, se
             [{key: Keys.ArrowRight, modifiers:[]}, "f_moveCursorRight"],
             [{key: Keys.ArrowUp, modifiers:[]}, "f_moveCursorUp"],
             [{key: Keys.ArrowDown, modifiers:[]}, "f_moveCursorDown"],
+            [{key: Keys.ArrowLeft, modifiers:[Modifiers.Shift]}, "f_moveCursorLeftAndSelect"],
+            [{key: Keys.ArrowRight, modifiers:[Modifiers.Shift]}, "f_moveCursorRightAndSelect"],
+            [{key: Keys.ArrowUp, modifiers:[Modifiers.Shift]}, "f_moveCursorUpAndSelect"],
+            [{key: Keys.ArrowDown, modifiers:[Modifiers.Shift]}, "f_moveCursorDownAndSelect"],
             [{key: Keys.x, modifiers:[Modifiers.Control]}, "f_copyNode"],
             [{key: Keys.v, modifiers:[Modifiers.Control, Modifiers.Shift]}, "f_pasteNodeAbove"],
             [{key: Keys.v, modifiers:[Modifiers.Control]}, "f_pasteNodeBelow"],
@@ -230,7 +235,6 @@ const DocumentKeys = forwardRef(({children}, ref) => {
     }, [isEditing, cursor])
 
     const f_moveCursorLeft = useCallback(() => {
-        console.log("Running!")
         if (!isEditing) {
             if (cursor.parent) moveCursor(cursor.parent) 
         }
@@ -239,6 +243,30 @@ const DocumentKeys = forwardRef(({children}, ref) => {
     const f_moveCursorRight = useCallback(() => {
         if (!isEditing) {
             if (cursor.children) moveCursor(cursor.children[0]) 
+        }
+    }, [isEditing, cursor])
+
+    const f_moveCursorDownAndSelect = useCallback(() => {
+        if (!isEditing) {
+            if (cursor.nextNode) moveCursor(cursor.nextNode, true)
+        }
+    }, [isEditing, cursor])
+
+    const f_moveCursorUpAndSelect = useCallback(() => {
+        if (!isEditing) {
+            if (cursor.prevNode) moveCursor(cursor.prevNode, true)
+        }
+    }, [isEditing, cursor])
+
+    const f_moveCursorLeftAndSelect = useCallback(() => {
+        if (!isEditing) {
+            if (cursor.parent) moveCursor(cursor.parent, true) 
+        }
+    }, [isEditing, cursor])
+
+    const f_moveCursorRightAndSelect = useCallback(() => {
+        if (!isEditing) {
+            if (cursor.children) moveCursor(cursor.children[0], true) 
         }
     }, [isEditing, cursor])
 
@@ -255,6 +283,10 @@ const DocumentKeys = forwardRef(({children}, ref) => {
             f_moveCursorDown,
             f_moveCursorLeft,
             f_moveCursorRight,
+            f_moveCursorUpAndSelect,
+            f_moveCursorDownAndSelect,
+            f_moveCursorLeftAndSelect,
+            f_moveCursorRightAndSelect,
             f_copyNode,
             f_pasteNodeAbove,
             f_pasteNodeBelow,

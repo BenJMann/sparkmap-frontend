@@ -191,6 +191,10 @@ body {
     border: 2px solid blue;
   }
 
+.prevSelected {
+  box-shadow: 0 0 7px 2px blue;
+}
+
   .documentContent {
     position: absolute;
   }

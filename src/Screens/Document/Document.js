@@ -75,9 +75,19 @@ const Document = () => {
 
     const [nodeToCopy, setNodeToCopy] = useState(null)
 
-    const moveCursor = (node) => {
+    const [selectedNodes, setSelectedNodes] = useState([])
+
+    const moveCursor = (node, isSelecting) => {
         if (cursor)
             cursor.dirtyStyles = true;
+        if (cursor && isSelecting)
+            setSelectedNodes((prev) => [...prev, cursor].reduce((acc, current) => {
+                const exists = acc.some(item => 
+                item === current
+                );
+                return exists ? acc : [...acc, current];
+            }, []))
+        else setSelectedNodes([])
         node.dirtyStyles = true;
         setCursor(node);
     }
@@ -490,7 +500,8 @@ const getDimensionsOfText = function(text, styles) {
         scrollNodeIntoPosition,
         scheduleUpdate,
         copyNode,
-        pasteNode
+        pasteNode,
+        selectedNodes
      }
     
 

@@ -10,7 +10,8 @@ const DocumentRender = () => {
         moveCursor, cursor,
         isEditing, editText,
         browseModifier, setHoveredNode, updateNodeText,
-        nodeStyle,username
+        nodeStyle,username,
+        selectedNodes
         } = useContext(DocumentContext)
 
     useEffect(() => {
@@ -81,11 +82,11 @@ const DocumentRender = () => {
                                 onMouseEnter={() => setHoveredNode(row)} 
                                 onMouseLeave={() => setHoveredNode(null)}
                                 >                                  
-                                    <div onClick={() => {
+                                    <div onClick={(e) => {
                                         if (isEditing) updateNodeText(cursor, editText);
-                                        moveCursor(row);
+                                        moveCursor(row, e.shiftKey);
                                     }} 
-                                        className={"cell " + (cursor===row ? 'selected ' : '') + (row.locked ? 'lockedCell' : (row.creator === username ? 'myCell' : 'yourCell'))} 
+                                        className={"cell " + (cursor===row ? 'selected ' : '') + (row.locked ? 'lockedCell' : (row.creator === username ? 'myCell' : 'yourCell') + (selectedNodes.includes(row) ? ' prevSelected' : ''))} 
                                         style={{left: row.xPx, top: row.yPx, height: row.height, width: row.width, ...calculateNodeStyle(row), ...(row.copying ? {border: '2px solid red'} : {}) }}
                                     >
                                         <div className="cellText" style={{position: 'relative', padding: nodeStyle.padding}}>{row.text}</div>
