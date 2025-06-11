@@ -147,8 +147,8 @@ const Document = () => {
             return;
         }
     
-        const toParent = to.parent;
-        const fromParent = nodeFrom.parent;
+        const toParent = to.parent || data[0];
+        const fromParent = nodeFrom.parent || data[0];
     
         // Find insertion and removal indices
         const toIdx = toParent.children.indexOf(to) + (!before ? 1 : 0);
