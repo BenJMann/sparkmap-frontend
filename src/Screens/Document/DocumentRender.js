@@ -35,13 +35,13 @@ const DocumentRender = () => {
                 node.xPx = parent && !parent.root ? parent.xPx + parent.width : 0;
                 maxX = Math.max(node.xPx + node.width, maxX)
                 if (prevNode) {node.firstNode = false; node.prevNode = prevNode;}
-                else node.firstNode = true
+                else {node.firstNode = true; node.prevNode = undefined; }
                 prevNode = node;
                 if (parent) {
                     node.parent = parent
                     }
                 if (d[i+1]) {node.lastNode = false; node.nextNode = d[i+1]}
-                else node.lastNode = true;
+                else {node.lastNode = true; node.nextNode = undefined}
                 if (!node.root) {
                     arr.push(node)
 
