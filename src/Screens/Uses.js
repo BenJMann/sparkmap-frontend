@@ -29,7 +29,7 @@ function Uses() {
     const uses = [
         {
             title: 'Chat Smarter, Not Harder',
-            text: "Ever had a conversation where threads are running concurrently? Sparkmap turns that situation into an artform. Effortlessly jump between ideas, respond to what matters most in the moment, and keep the conversation flowing without losing your place. It's conversation, organized — in real time.",
+            text: "Ever had a conversation where multiple threads are running concurrently? Sparkmap turns that situation into an artform. Effortlessly jump between ideas, respond to what matters most in the moment, and keep the conversation flowing without losing your place. It's conversation, organized — in real time.",
             image: chatSmarter
         },
         {

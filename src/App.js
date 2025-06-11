@@ -11,6 +11,7 @@ import Dashboard from "./Screens/Dashboard/Dashboard.js"
 import Home from './Screens/Home.js';
 import Interface from './Screens/Interface.js';
 import Document from './Screens/Document/Document.js';
+import Register from './Screens/Register.js';
 
 import Uses from './Screens/Uses.js';
 
@@ -53,6 +54,7 @@ function App() {
           <Route path="/" element={<Interface />}>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/Uses" element={<Uses />} />
             <Route exact path="/logout" element={<PrivateRoute />} >
               <Route exact path="/logout" element={<Logout/>} />

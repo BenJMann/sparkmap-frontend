@@ -111,7 +111,7 @@ function Header() {
             </Box>
             :
             <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
-                <Button color="inherit">Register</Button>
+                <Button color="inherit" href="/register">Register</Button>
                 <Typography sx={{mt: 0.7}}>|</Typography>
                 <Button color="inherit" href="/login">Login</Button>
             </Box>
