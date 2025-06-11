@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { Navigate } from "react-router-dom"
+
 import Box from '@mui/material/Box';
 import Grid2 from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
@@ -15,6 +16,7 @@ import Beginning from "../Images/Beginning.png"
 import gridBG from "../Images/gridBG.jpg"
 
 function Home() {
+  if (sessionStorage.getItem("token")) return <Navigate to="/dashboard" />
   return (
     <>
     <Box
