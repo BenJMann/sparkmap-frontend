@@ -37,7 +37,7 @@ const DocumentRender = () => {
                 if (prevNode) {node.firstNode = false; node.prevNode = prevNode;}
                 else node.firstNode = true
                 prevNode = node;
-                if (parent && xDepth > 1) {
+                if (parent) {
                     node.parent = parent
                     }
                 if (d[i+1]) {node.lastNode = false; node.nextNode = d[i+1]}

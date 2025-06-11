@@ -78,6 +78,7 @@ const Document = () => {
     const [selectedNodes, setSelectedNodes] = useState([])
 
     const moveCursor = (node, isSelecting) => {
+        if (node.root) return
         if (cursor)
             cursor.dirtyStyles = true;
         if (cursor && isSelecting)
@@ -147,8 +148,8 @@ const Document = () => {
             return;
         }
     
-        const toParent = to.parent || data[0];
-        const fromParent = nodeFrom.parent || data[0];
+        const toParent = to.parent;
+        const fromParent = nodeFrom.parent;
     
         // Find insertion and removal indices
         const toIdx = toParent.children.indexOf(to) + (!before ? 1 : 0);
