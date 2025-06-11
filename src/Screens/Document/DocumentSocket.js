@@ -65,7 +65,7 @@ const DocumentSocket = () => {
             }
         }
 
-        resolvePathSegment(data[0], path.slice(1, path.length))
+        resolvePathSegment(data[0], path)
         return returnData;
     }
 
