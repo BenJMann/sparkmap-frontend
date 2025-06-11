@@ -4,6 +4,8 @@ import { DocumentContext } from "./Document";
 
 import calculateNodeStyle from "../CalculateNodeStyles";
 
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
 const DocumentRender = () => {
     const {data, grid, setGrid, gridWindow, setGridWindow, setGridWindowRefresh,
         screenPosition, screenDimensions, setTotalDimensions,
@@ -46,7 +48,7 @@ const DocumentRender = () => {
                     totalHeight += node.height + nodeStyle.marginCollapsed;
                 }
                 y++;
-                if (node.children) {
+                if (node.children && !node.collapsed) {
                     getNode(node.children, xDepth+1, node)
                 }
             })
@@ -91,6 +93,9 @@ const DocumentRender = () => {
                                     >
                                         <div className="cellText" style={{position: 'relative', padding: nodeStyle.padding}}>{row.text}</div>
                                     </div>
+                                    {row.collapsed &&
+                                        <AddCircleOutlineIcon className="plusIcon" style={{position: 'absolute', left: row.xPx + row.width + 5, top: row.yPx + row.height/2 - 9}}/>
+                                    }
                                 </div>
                                 :
                                 null

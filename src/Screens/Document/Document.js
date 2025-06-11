@@ -113,6 +113,14 @@ const Document = () => {
         markAsCopying(cursor)
     }
 
+    const toggleCollapse = (node) => {
+        if (node.children && !node.collapsed) {
+            node.collapsed = true;
+        }
+        else node.collapsed = false;
+        setData([...data]); // Force a re-render in case of UI feedback
+    }
+
     const pasteNode = (to, from, before, child) => {
         const nodeFrom = from || nodeToCopy;
     
@@ -501,7 +509,8 @@ const getDimensionsOfText = function(text, styles) {
         scheduleUpdate,
         copyNode,
         pasteNode,
-        selectedNodes
+        selectedNodes,
+        toggleCollapse
      }
     
 

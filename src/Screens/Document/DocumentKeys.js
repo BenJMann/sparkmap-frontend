@@ -1,6 +1,5 @@
 import React, { useCallback, forwardRef, useContext, useState, useMemo } from "react";
 import { DocumentContext } from "./Document";
-import { TruckFieldUn } from "@styled-icons/fa-solid";
 
 const Keys = {
     Typable: /^[A-Za-z0-9`=\\[\];',./\- !@#£$%^&*()_+{}|:"<>?~]$/,
@@ -16,7 +15,7 @@ const Keys = {
     Shift: "Shift",
     Control: "Control",
     Alt: "Alt",
-    Space: "Space",
+    Space: " ",
     PageUp: "PageUp",
     PageDown: "PageDown",
     Home: "Home",
@@ -68,6 +67,7 @@ const KeyManager = forwardRef(({functions, screenDimensions, totalDimensions, se
             [{key: Keys.Enter, modifiers:[Modifiers.Control]}, "f_createSiblingNodeBelow"],
             [{key: Keys.Delete, modifiers:[]}, "f_deleteCell"],
             [{key: Keys.Escape, modifiers:[]}, "f_escapeEdit"], 
+            [{key: Keys.Space, modifiers:[Modifiers.Control]}, "f_toggleCollapse"], 
 
             [{key: Keys.Typable, modifiers:[], mode: Modes.Normal}, "f_enterType"],
         ])
@@ -102,8 +102,9 @@ const KeyManager = forwardRef(({functions, screenDimensions, totalDimensions, se
         else {
             setModifierPressed(null);
         }
-        if (direction === "keydown")
+        if (direction === "keydown") {
             callFunction(keyWithModifiers, event)
+        }
     }, [keyBindings, modifierPressed, functions]);
 
     const callFunction = useCallback((keyWithModifiers, event) => {
@@ -167,7 +168,9 @@ const DocumentKeys = forwardRef(({children}, ref) => {
         screenDimensions,
         setScreenPosition,
         copyNode,
-        pasteNode} = useContext(DocumentContext)
+        pasteNode,
+        toggleCollapse,
+    } = useContext(DocumentContext)
 
     const f_deleteCell = useCallback(() => {
         deleteCell(cursor);
@@ -278,6 +281,10 @@ const DocumentKeys = forwardRef(({children}, ref) => {
             editCell(cursor, cursor.text)
     }, [isEditing, editText, cursor])
 
+    const f_toggleCollapse = useCallback(() => {
+        toggleCollapse(cursor);
+    }, [isEditing, editText, cursor])
+
     const functions = {
             f_moveCursorUp,
             f_moveCursorDown,
@@ -296,7 +303,8 @@ const DocumentKeys = forwardRef(({children}, ref) => {
             f_deleteCell,
             f_enterType,
             f_escapeEdit,
-            f_toggleEdit
+            f_toggleEdit,
+            f_toggleCollapse
         }
 
      return <KeyManager ref={ref}

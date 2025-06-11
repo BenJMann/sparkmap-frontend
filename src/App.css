@@ -165,6 +165,10 @@ body {
     font-size: 11pt;
   }
 
+  .plusIcon {
+    position: absolute;
+  }
+
   .cellText {
       -webkit-touch-callout: none;
       -webkit-user-select: none;
