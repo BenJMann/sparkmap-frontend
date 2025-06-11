@@ -24,6 +24,8 @@ import dictate from '../Images/dictate.png'
 import notes from '../Images/notes.png'
 import heatOfTheMoment from '../Images/heatOfTheMoment.png'
 import growWithIntention from '../Images/growWithIntention.png'
+import conflictIntoClarity from '../Images/conflictIntoClarity.png'
+import coaching from "../Images/coaching.png"
 
 function Uses() {
     const uses = [
@@ -65,7 +67,7 @@ function Uses() {
         {
             title: 'Turn Conflict into Clarity',
             text: "After a tough conversation, SparkMap helps you make sense of what happened — and what matters most. Reflect, untangle misunderstandings, and explore new ways to connect with tools inspired by practices like Nonviolent Communication. It’s a space for insight, healing, and growth — one conversation at a time.",
-            image: chatSmarter
+            image: conflictIntoClarity
         },
         {
             title: 'Stay Grounded in the Heat of the Moment',
@@ -75,7 +77,7 @@ function Uses() {
         {
             title: 'Coach with Confidence and Clarity',
             text: "SparkMap helps you guide your clients through meaningful conversations with ease. Capture insights, track progress, and organize session notes in real time — all in one place. Focus on connection and transformation while SparkMap handles the structure and follow-up.",
-            image: chatSmarter
+            image: coaching
         }
     ]
     return (
