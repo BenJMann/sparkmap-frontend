@@ -1,7 +1,5 @@
-import { Outlet, Link } from "react-router-dom";
-import { LoginContext } from "../LoginProvider";
-import { useContext } from "react";
 import LogoWithGradient from "../Images/LogoWithGradient.png"
+import { useNavigate } from "react-router-dom";
 
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
@@ -16,10 +14,12 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
-const pages = [['Home', '/'], ['Uses','/Uses'], ['Docs', '/Documentation']];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pagesLoggedOut = [['Home', '/'], ['Uses','/Uses']];
+const pagesLoggedIn = [['Dashboard', '/dashboard'], ['Docs', '/Documentation']]
+const settings = [['Profile', '/Profile'], ['Account', '/Account'], ['Logout', '/logout']];
 
 function Header() {
+  const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenUserMenu = (event) => {
@@ -29,8 +29,6 @@ function Header() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-  const {loggedIn} = useContext(LoginContext)
 
   return (
     <AppBar position="static" 
@@ -69,7 +67,7 @@ function Header() {
         </Typography>
 
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {(sessionStorage.getItem("token") ? pagesLoggedIn : pagesLoggedOut).map((page) => (
             <Button
                 key={page[0]}
                 href={page[1]}
@@ -79,7 +77,7 @@ function Header() {
             </Button>
             ))}
         </Box>
-        { loggedIn ?
+        { sessionStorage.getItem("token") ?
             <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -103,8 +101,8 @@ function Header() {
                 onClose={handleCloseUserMenu}
                 >
                 {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                    <MenuItem key={setting} onClick={() => navigate(setting[1])}>
+                    <Typography sx={{ textAlign: 'center' }}>{setting[0]}</Typography>
                     </MenuItem>
                 ))}
                 </Menu>
