@@ -8,8 +8,10 @@ import { LoginContext } from "../../LoginProvider";
 
 import CSVReader from "../CSVReader";
 
-import RenameDialog from "../RenameDialog";
+import RenameDialog from "./RenameDialog";
 import DeleteDocumentDialog from "./DeleteDocumentDialog";
+import NewDocumentDialog from "./NewDocumentDialog";
+
 import DashboardTable from "./DashboardTable";
 
 
@@ -50,7 +52,7 @@ function Dashboard() {
     }
 
 
-    const createNew = () => {
+    const createNew = (documentName) => {
         socket.emit("newDocument", {name: documentName})
         setShowNewPopup(false);
     }
@@ -114,18 +116,9 @@ function Dashboard() {
         <DeleteDocumentDialog open={showDeleteDialog} setOpen={setShowDeleteDialog} 
             documentId={documentToEdit.documentId} documentName={documentToEdit.documentName} 
             deleteDocument={deleteDocument}/>}
-        {showNewPopup && <div className="popup">
-            <div style={{display: 'flex', 'flexDirection': 'column', justifyContent: 'center', alignItems: 'center'}}>
-            <h4>Document Name</h4>
-            <input value={documentName} onChange={(e) => {setDocumentName(e.target.value)}} type="text" style={{width: '300px'}} />
-            <div style={{display: 'flex', flexDirection: 'row', marginTop: '10px'}}>
-            <button onClick={() => setShowNewPopup(false)}>Cancel</button>
-            <button onClick={createNew}>Confirm</button>
-            </div>
-   
-            </div>
-
-        </div>}
+        {showNewPopup && 
+          <NewDocumentDialog open={showNewPopup} setOpen={setShowNewPopup} createNewDocument={createNew} />
+        }
 
         {showImportPopup && <div className="popup2">
             <div style={{display: 'flex', 'flexDirection': 'column', justifyContent: 'center', alignItems: 'center'}}>

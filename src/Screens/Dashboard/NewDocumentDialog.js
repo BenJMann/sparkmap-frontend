@@ -7,21 +7,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function RenameDialog({open, setOpen, documentId, documentName, renameDocument}) {
+export default function NewDocumentDialog({open, setOpen, createNewDocument}) {
 
-  const [newName, setNewName] = React.useState(documentName)
+  const [documentName, setDocumentName] = React.useState('')
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleRename = () => {
-    console.log(`Renaming ${documentId} from ${documentName} to ${newName}`)
-    renameDocument(documentId, newName)
+  const handleCreateNew = () => {
+    createNewDocument(documentName)
     handleClose();
   }
 
   return (
-    <React.Fragment>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -37,28 +35,27 @@ export default function RenameDialog({open, setOpen, documentId, documentName, r
           },
         }}
       >
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>Create</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Rename the document.
+            Create new SparkMap.
           </DialogContentText>
           <TextField
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
+            value={documentName}
+            onChange={(e) => setDocumentName(e.target.value)}
             autoFocus
             required
             margin="dense"
             name="documentName"
-            label="New Document Name"
+            label="New SparkMap Name"
             fullWidth
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleRename}>Rename</Button>
+          <Button onClick={handleCreateNew}>Create</Button>
         </DialogActions>
       </Dialog>
-    </React.Fragment>
   );
 }
