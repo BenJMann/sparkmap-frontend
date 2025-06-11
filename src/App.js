@@ -12,6 +12,8 @@ import Home from './Screens/Home.js';
 import Interface from './Screens/Interface.js';
 import Document from './Screens/Document/Document.js';
 
+import Uses from './Screens/Uses.js';
+
 import WebsocketsProvider from './WebsocketsProvider.js';
 import LoginProvider from './LoginProvider.js';
 
@@ -51,6 +53,7 @@ function App() {
           <Route path="/" element={<Interface />}>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/Uses" element={<Uses />} />
             <Route exact path="/logout" element={<PrivateRoute />} >
               <Route exact path="/logout" element={<Logout/>} />
             </Route>
