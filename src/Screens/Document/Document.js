@@ -78,9 +78,24 @@ const Document = () => {
     const [selectedNodes, setSelectedNodes] = useState([])
 
     const moveCursor = (node, isSelecting) => {
+        if (typeof node === 'string') {
+            if (node === 'child') {
+                if (cursor.prevNav) {
+                    if (cursor.children.includes(cursor.prevNav))
+                        node = cursor.prevNav;
+                    else {
+                        cursor.prevNav = undefined;
+                        node = cursor.children[0];
+                    }
+                }
+                else node = cursor.children[0]
+            }
+        }
         if (node.root) return
-        if (cursor)
+        if (cursor) {
+            cursor.parent.prevNav = cursor;
             cursor.dirtyStyles = true;
+        }
         if (cursor && isSelecting)
             setSelectedNodes((prev) => [...prev, cursor].reduce((acc, current) => {
                 const exists = acc.some(item => 

@@ -245,7 +245,7 @@ const DocumentKeys = forwardRef(({children}, ref) => {
 
     const f_moveCursorRight = useCallback(() => {
         if (!isEditing) {
-            if (cursor.children) moveCursor(cursor.children[0]) 
+            if (cursor.children) moveCursor('child') 
         }
     }, [isEditing, cursor])
 
@@ -269,7 +269,7 @@ const DocumentKeys = forwardRef(({children}, ref) => {
 
     const f_moveCursorRightAndSelect = useCallback(() => {
         if (!isEditing) {
-            if (cursor.children) moveCursor(cursor.children[0], true) 
+            if (cursor.children) moveCursor('child', true) 
         }
     }, [isEditing, cursor])
 
