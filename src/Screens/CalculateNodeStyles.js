@@ -96,7 +96,7 @@ function moveHueToward(currentHue, targetHue, step) {
 }
 
 
-const calculateNodeStyle = (node) => {
+const calculateNodeStyle = (node, selectedNodes) => {
     const styles = {}
     if (node.style?.isBold) styles.fontWeight = 'bold'
     if (node.style?.isItalic) styles.fontStyle = 'italic'
@@ -105,6 +105,10 @@ const calculateNodeStyle = (node) => {
     if (node.style?.fontSize) styles.fontSize = node.style.fontSize
     if (node.style?.textColor) styles.color = node.style.textColor
     if (node.style?.fillColor) styles.backgroundColor = node.style.fillColor
+    const isSelected = selectedNodes?.includes(node);
+    if (isSelected && ! node.copying) styles.boxShadow = '0 0 7px 2px blue'
+    if (!isSelected && node.copying) styles.boxShadow = '0 0 7px 2px red'
+    if (isSelected && node.copying) styles.boxShadow = '0 0 7px 2px rgb(255, 0, 174)'
     return styles;
 
 }

@@ -126,6 +126,7 @@ const Document = () => {
     }
 
     const copyNode = () => {
+        unmarkAsCopying();
         setNodeToCopy(cursor)
 
         const markAsCopying = (node) => {
@@ -145,6 +146,18 @@ const Document = () => {
         setData([...data]); // Force a re-render in case of UI feedback
     }
 
+    const unmarkAsCopying = (node) => {
+        if (!node && nodeToCopy) {
+            node = nodeToCopy
+            setNodeToCopy(null);
+        }
+        else if (!node) return;
+        node.copying = false;
+        if (node.children) {
+            node.children.forEach(unmarkAsCopying);
+        }
+    };
+
     const pasteNode = (to, from, before, child) => {
         const nodeFrom = from || nodeToCopy;
     
@@ -155,12 +168,6 @@ const Document = () => {
     
         // Unmark copying state if no source node (`from`) is provided
         if (!from) {
-            const unmarkAsCopying = (node) => {
-                node.copying = false;
-                if (node.children) {
-                    node.children.forEach(unmarkAsCopying);
-                }
-            };
             unmarkAsCopying(nodeToCopy);
         }
     
@@ -534,7 +541,8 @@ const getDimensionsOfText = function(text, styles) {
         copyNode,
         pasteNode,
         selectedNodes,
-        toggleCollapse
+        toggleCollapse,
+        unmarkAsCopying
      }
     
 

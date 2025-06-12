@@ -67,7 +67,8 @@ const KeyManager = forwardRef(({functions, screenDimensions, totalDimensions, se
             [{key: Keys.Enter, modifiers:[Modifiers.Control, Modifiers.Shift]}, "f_createSiblingNodeAbove"],
             [{key: Keys.Enter, modifiers:[Modifiers.Control]}, "f_createSiblingNodeBelow"],
             [{key: Keys.Delete, modifiers:[]}, "f_deleteCell"],
-            [{key: Keys.Escape, modifiers:[]}, "f_escapeEdit"], 
+            [{key: Keys.Escape, modifiers:[], mode: Modes.Normal}, "f_unmarkAsCopying"], 
+            [{key: Keys.Escape, modifiers:[], mode: Modes.Edit}, "f_escapeEdit"], 
             [{key: Keys.Space, modifiers:[Modifiers.Control]}, "f_toggleCollapse"], 
 
             [{key: Keys.Typable, modifiers:[Modifiers.OptionalShift], mode: Modes.Normal}, "f_enterType"],
@@ -199,6 +200,7 @@ const DocumentKeys = forwardRef(({children}, ref) => {
         copyNode,
         pasteNode,
         toggleCollapse,
+        unmarkAsCopying
     } = useContext(DocumentContext)
 
     const f_deleteCell = useCallback(() => {
@@ -314,6 +316,10 @@ const DocumentKeys = forwardRef(({children}, ref) => {
         toggleCollapse(cursor);
     }, [isEditing, editText, cursor])
 
+    const f_unmarkAsCopying = useCallback(() => {
+        unmarkAsCopying();
+    }, [unmarkAsCopying])
+
     const functions = {
             f_moveCursorUp,
             f_moveCursorDown,
@@ -333,7 +339,8 @@ const DocumentKeys = forwardRef(({children}, ref) => {
             f_enterType,
             f_escapeEdit,
             f_toggleEdit,
-            f_toggleCollapse
+            f_toggleCollapse,
+            f_unmarkAsCopying
         }
 
      return <KeyManager ref={ref}

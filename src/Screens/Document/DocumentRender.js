@@ -73,10 +73,10 @@ const DocumentRender = () => {
 
     return (
                     <>
-                    {gridWindow.map((row, y) => {
+                    {gridWindow.map((row, i) => {
                         if (!row) return null
                         return (
-                            <>
+                            <div key={i}>
                             {
                                 (!isEditing || cursor !== row) ?
                                                 
@@ -88,8 +88,8 @@ const DocumentRender = () => {
                                         if (isEditing) updateNodeText(cursor, editText);
                                         moveCursor(row, e.shiftKey);
                                     }} 
-                                        className={"cell " + (cursor===row ? 'selected ' : '') + (row.locked ? 'lockedCell' : (row.creator === username ? 'myCell' : 'yourCell') + (selectedNodes.includes(row) ? ' prevSelected' : ''))} 
-                                        style={{left: row.xPx, top: row.yPx, height: row.height, width: row.width, ...calculateNodeStyle(row), ...(row.copying ? {border: '2px solid red'} : {}) }}
+                                        className={"cell " + (cursor===row ? 'selected ' : '') + (row.locked ? 'lockedCell' : (row.creator === username ? 'myCell' : 'yourCell'))} 
+                                        style={{left: row.xPx, top: row.yPx, height: row.height, width: row.width, ...calculateNodeStyle(row, selectedNodes) }}
                                     >
                                         <div className="cellText" style={{position: 'relative', padding: nodeStyle.padding}}>{row.text}</div>
                                     </div>
@@ -100,7 +100,7 @@ const DocumentRender = () => {
                                 :
                                 null
                             }
-                            </>
+                            </div>
                         )
                     })}
                     </>
