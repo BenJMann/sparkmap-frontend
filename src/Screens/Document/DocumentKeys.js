@@ -32,6 +32,7 @@ const Modifiers = {
     Shift: "Shift",
     Control: "Control",
     Alt: "Alt",
+    OptionalShift: "OptionalShift"
 }
 
 const Modes = {
@@ -69,7 +70,7 @@ const KeyManager = forwardRef(({functions, screenDimensions, totalDimensions, se
             [{key: Keys.Escape, modifiers:[]}, "f_escapeEdit"], 
             [{key: Keys.Space, modifiers:[Modifiers.Control]}, "f_toggleCollapse"], 
 
-            [{key: Keys.Typable, modifiers:[], mode: Modes.Normal}, "f_enterType"],
+            [{key: Keys.Typable, modifiers:[Modifiers.OptionalShift], mode: Modes.Normal}, "f_enterType"],
         ])
     );
 
@@ -107,18 +108,46 @@ const KeyManager = forwardRef(({functions, screenDimensions, totalDimensions, se
         }
     }, [keyBindings, modifierPressed, functions]);
 
+    const modifiersMatch = useCallback((bindingKey, pressedKey) => {
+        const isOptionalShift = bindingKey.modifiers.includes(Modifiers.OptionalShift);
+        const pressedModifiers = new Set(pressedKey.modifiers);
+        const requiredModifiers = new Set(bindingKey.modifiers);
+        
+        if (isOptionalShift) {
+            // Remove OptionalShift from required modifiers
+            requiredModifiers.delete(Modifiers.OptionalShift);
+            
+            // Check if pressed modifiers contain all required modifiers
+            const hasRequiredModifiers = [...requiredModifiers].every(mod => pressedModifiers.has(mod));
+            
+            // Check shift state
+            const hasShift = pressedModifiers.has(Modifiers.Shift);
+            
+            // Valid cases:
+            // 1. Has required modifiers and no extra modifiers (shift not pressed)
+            // 2. Has required modifiers plus shift (shift pressed)
+            return hasRequiredModifiers && 
+                (pressedKey.modifiers.length === requiredModifiers.size || 
+                    (pressedKey.modifiers.length === requiredModifiers.size + 1 && hasShift));
+        }
+        
+        // Normal case - exact match required
+        return pressedKey.modifiers.length === bindingKey.modifiers.length &&
+            [...requiredModifiers].every(mod => pressedModifiers.has(mod));
+    }, []);
+
     const callFunction = useCallback((keyWithModifiers, event) => {
         let matchedAction = null;
         for (const [key, value] of keyBindings) {
             if (key.key instanceof RegExp &&
-                key.key.test(event.key) &&
+                key.key.test(keyWithModifiers.key) &&
+                modifiersMatch(key, keyWithModifiers) &&
                 currentModes.includes(key.mode)) {
                     matchedAction = value;
                     break
             }
             else if (key.key === keyWithModifiers.key && 
-               key.modifiers.length === keyWithModifiers.modifiers.length &&
-               key.modifiers.every(mod => keyWithModifiers.modifiers.includes(mod)) &&
+               modifiersMatch(key, keyWithModifiers) &&
                currentModes.includes(key.mode)) {
                 matchedAction = value;
                 break;
