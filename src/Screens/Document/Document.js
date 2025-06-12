@@ -214,6 +214,24 @@ const Document = () => {
 
         socket.emit("pasteNode", {fromPath: calculatePath(nodeFrom), toPath: calculatePath(to), before})
     };
+
+
+    const copyTreeToClipboard = (node) => {
+        console.log("COPYING");
+        let text = "";
+        const addText = (node, indent) => {
+            let tabs = '';
+            for (let i=0; i<indent; i++) {
+                tabs = tabs + "\t";
+            }
+            text = text + tabs + node.text + "\n";
+            if (node.children) {
+                node.children.forEach((child) => addText(child, indent+1))
+            }
+        }
+        addText(node, 0)
+        navigator.clipboard.writeText(text.slice(0, -1));
+    }
     
 
 const getDimensionsOfText = function(text, styles) {
@@ -542,7 +560,8 @@ const getDimensionsOfText = function(text, styles) {
         pasteNode,
         selectedNodes,
         toggleCollapse,
-        unmarkAsCopying
+        unmarkAsCopying,
+        copyTreeToClipboard
      }
     
 

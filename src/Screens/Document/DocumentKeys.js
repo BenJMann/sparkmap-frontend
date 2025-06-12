@@ -27,7 +27,8 @@ const Keys = {
     x: /[xX]/,
     v: /[vV]/,
     s: /[sS]/,
-    d: /[dD]/
+    d: /[dD]/,
+    c: /[cC]/
 }
 
 const Modifiers = {
@@ -64,6 +65,7 @@ const KeyManager = forwardRef(({functions, screenDimensions, totalDimensions, se
             [{key: Keys.x, modifiers:[Modifiers.Control]}, "f_copyNode"],
             [{key: Keys.v, modifiers:[Modifiers.Control, Modifiers.Shift]}, "f_pasteNodeAbove"],
             [{key: Keys.v, modifiers:[Modifiers.Control]}, "f_pasteNodeBelow"],
+            [{key: Keys.c, modifiers:[Modifiers.Control]}, "f_copyTreeToClipboard"],
             [{key: Keys.Tab, modifiers:[]}, "f_createChildNode"],
             [{key: Keys.Enter, modifiers:[]}, "f_toggleEdit"], 
             [{key: Keys.Enter, modifiers:[Modifiers.Control, Modifiers.Shift]}, "f_createSiblingNodeAbove"],
@@ -206,7 +208,8 @@ const DocumentKeys = forwardRef(({children}, ref) => {
         copyNode,
         pasteNode,
         toggleCollapse,
-        unmarkAsCopying
+        unmarkAsCopying,
+        copyTreeToClipboard
     } = useContext(DocumentContext)
 
     const f_deleteCell = useCallback(() => {
@@ -326,6 +329,11 @@ const DocumentKeys = forwardRef(({children}, ref) => {
         unmarkAsCopying();
     }, [unmarkAsCopying])
 
+    const f_copyTreeToClipboard = useCallback(() => {
+        console.log("Callback")
+        copyTreeToClipboard(cursor);
+    }, [cursor])
+
     const f_doNothing = useCallback(() => null, [])
 
     const functions = {
@@ -349,6 +357,7 @@ const DocumentKeys = forwardRef(({children}, ref) => {
             f_toggleEdit,
             f_toggleCollapse,
             f_unmarkAsCopying,
+            f_copyTreeToClipboard,
             f_doNothing
         }
 
