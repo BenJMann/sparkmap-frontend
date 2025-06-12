@@ -77,6 +77,19 @@ const Document = () => {
 
     const [selectedNodes, setSelectedNodes] = useState([])
 
+    const selectNode = (node) => {
+            setSelectedNodes((prev) => [...prev, node].reduce((acc, current) => {
+                const exists = acc.some(item => 
+                item === current
+                );
+                return exists ? acc : [...acc, current];
+            }, []))
+    }
+    
+    const clearSelection = () => {
+        setSelectedNodes([])
+    }
+
     const moveCursor = (node, isSelecting) => {
         if (typeof node === 'string') {
             if (node === 'child') {
@@ -97,13 +110,8 @@ const Document = () => {
             cursor.dirtyStyles = true;
         }
         if (cursor && isSelecting)
-            setSelectedNodes((prev) => [...prev, cursor].reduce((acc, current) => {
-                const exists = acc.some(item => 
-                item === current
-                );
-                return exists ? acc : [...acc, current];
-            }, []))
-        else setSelectedNodes([])
+            selectNode(cursor);
+        else clearSelection();
         node.dirtyStyles = true;
         setCursor(node);
     }
