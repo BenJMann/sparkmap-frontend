@@ -25,7 +25,9 @@ const Keys = {
     NumLock: "NumLock",
     ScrollLock: "ScrollLock",
     x: /[xX]/,
-    v: /[vV]/
+    v: /[vV]/,
+    s: /[sS]/,
+    d: /[dD]/
 }
 
 const Modifiers = {
@@ -72,6 +74,10 @@ const KeyManager = forwardRef(({functions, screenDimensions, totalDimensions, se
             [{key: Keys.Space, modifiers:[Modifiers.Control]}, "f_toggleCollapse"], 
 
             [{key: Keys.Typable, modifiers:[Modifiers.OptionalShift], mode: Modes.Normal}, "f_enterType"],
+            
+            [{key: Keys.s, modifiers:[Modifiers.Control]}, "f_doNothing"], 
+            [{key: Keys.d, modifiers:[Modifiers.Control]}, "f_doNothing"], 
+
         ])
     );
 
@@ -320,6 +326,8 @@ const DocumentKeys = forwardRef(({children}, ref) => {
         unmarkAsCopying();
     }, [unmarkAsCopying])
 
+    const f_doNothing = useCallback(() => null, [])
+
     const functions = {
             f_moveCursorUp,
             f_moveCursorDown,
@@ -340,7 +348,8 @@ const DocumentKeys = forwardRef(({children}, ref) => {
             f_escapeEdit,
             f_toggleEdit,
             f_toggleCollapse,
-            f_unmarkAsCopying
+            f_unmarkAsCopying,
+            f_doNothing
         }
 
      return <KeyManager ref={ref}
