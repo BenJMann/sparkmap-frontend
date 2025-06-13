@@ -13,7 +13,8 @@ const DocumentRender = () => {
         isEditing, editText,
         browseModifier, setHoveredNode, updateNodeText,
         nodeStyle,username,
-        selectedNodes
+        selectedNodes,
+        setBreadcrumbs
         } = useContext(DocumentContext)
 
     useEffect(() => {
@@ -126,7 +127,30 @@ const DocumentRender = () => {
         }));
 
         setSpans([...fullHeightSpans, ...partialsList]);
+        setGridWindowRefresh(false);
     }, [gridWindow, screenPosition.y, screenDimensions.height]);
+
+
+
+    useEffect(() => {
+        if (!cursor) return setBreadcrumbs([])
+        const inYbounds = cursor.yPx + cursor.height + nodeStyle.marginCollapsed >= screenPosition.y && cursor.yPx + nodeStyle.marginCollapsed <= (screenPosition.y + screenDimensions.height)
+        const inXbounds = cursor.xPx + cursor.width >= screenPosition.x && cursor.xPx  <= screenPosition.x + screenDimensions.width
+        if (!inYbounds) return setBreadcrumbs([]);
+        if (!inXbounds) return;
+        let node = cursor;
+        const parentsNodeList = [];
+
+        while (node?.parent && !node.parent.root) {
+            node = node.parent;
+            if (!gridWindow.includes(node)) {
+                parentsNodeList.push(node);
+            }
+        }
+        const n = parentsNodeList.find((n) => n.text == "Programming Concept");
+        if (n) console.log(n.text)
+        setBreadcrumbs(parentsNodeList.reverse().filter((bc) => bc.xPx + bc.width - screenPosition.x >= 0));
+    }, [gridWindow, cursor, screenPosition.x])
 
     return (
                     <>

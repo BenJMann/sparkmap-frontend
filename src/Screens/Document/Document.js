@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, useContext, useLayoutEffect, createContext } from "react"
+import { useState, useEffect, useCallback, useRef, useContext, useLayoutEffect, createContext, useMemo } from "react"
 import { useParams } from "react-router-dom"
 
 
@@ -17,6 +17,7 @@ import DocumentKeys from "./DocumentKeys"
 import DocumentRender from "./DocumentRender"
 import DocumentSocket from "./DocumentSocket"
 import DocumentEditContainer from "./DocumentEditContainer"
+import BreadcrumbsTrail from "./BreadcrumbsTrail"
 
 import calculateNodeStyle from "../CalculateNodeStyles"
 
@@ -76,6 +77,14 @@ const Document = () => {
     const [nodeToCopy, setNodeToCopy] = useState(null)
 
     const [selectedNodes, setSelectedNodes] = useState([])
+
+    const breadcrumbHeight = 40;
+    const breadcrumbsEnabled = true;
+    
+    const [breadcrumbs, setBreadcrumbs] = useState([]);
+
+    const breadcrumbsDisplayed = useMemo(() => breadcrumbsEnabled && breadcrumbs.length > 0, [breadcrumbs, breadcrumbsEnabled])
+    
 
     const selectNode = (node) => {
             setSelectedNodes((prev) => [...prev, node].reduce((acc, current) => {
@@ -489,9 +498,9 @@ const getDimensionsOfText = function(text, styles) {
 
     useEffect(() => {
         const width = windowSize.width;
-        const height = windowSize.height - 125;
+        const height = windowSize.height - 125 - (breadcrumbsDisplayed ? breadcrumbHeight : 0);
         setScreenDimensions({width, height})
-    }, [windowSize])
+    }, [windowSize, breadcrumbsDisplayed])
 
 
     useEffect(() => {
@@ -512,6 +521,8 @@ const getDimensionsOfText = function(text, styles) {
             scrollNodeIntoView(cursor)
         }
       }, [cursor])
+
+
 
      const docCtxt = {
         data,
@@ -561,7 +572,10 @@ const getDimensionsOfText = function(text, styles) {
         selectedNodes,
         toggleCollapse,
         unmarkAsCopying,
-        copyTreeToClipboard
+        copyTreeToClipboard,
+        breadcrumbs,
+        setBreadcrumbs,
+        breadcrumbHeight
      }
     
 
@@ -569,6 +583,7 @@ const getDimensionsOfText = function(text, styles) {
         <DocumentContext.Provider value={docCtxt}>
         <div>
             <DocumentHeader setShowSharePopup={setShowSharePopup} />
+            {breadcrumbsDisplayed && <BreadcrumbsTrail/> }
             <SharePopup show={showSharePopup} onHide={() => setShowSharePopup(false)}/>
             <DocumentSocket  />
             <div className="documentContainer">

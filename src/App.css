@@ -165,6 +165,19 @@ body {
     font-size: 11pt;
   }
 
+.breadcrumbText {
+    white-space: nowrap;     /* Forces single line */
+    overflow: hidden;        /* Hides overflow */
+    text-overflow: ellipsis; /* Adds "..." */
+    width: 100%;            /* Fills parent container */
+    box-sizing: border-box;  /* Includes padding in width calculation */
+    padding: 0 4px;         /* Adjust as needed (must not exceed parent width) */
+    user-select: none;
+    cursor: pointer;
+}
+
+
+
   .plusIcon {
     position: absolute;
   }
