@@ -79,7 +79,7 @@ const Document = () => {
     const [selectedNodes, setSelectedNodes] = useState([])
 
     const breadcrumbHeight = 40;
-    const breadcrumbsEnabled = true;
+    const breadcrumbsEnabled = false;
     
     const [breadcrumbs, setBreadcrumbs] = useState([]);
 

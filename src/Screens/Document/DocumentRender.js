@@ -17,6 +17,8 @@ const DocumentRender = () => {
         setBreadcrumbs
         } = useContext(DocumentContext)
 
+        const [gridWindowWithoutCursor, setGridWindowWithoutCursor] = useState([])
+
     useEffect(() => {
         let y = 0;
         let arr = []
@@ -61,38 +63,44 @@ const DocumentRender = () => {
 
     useEffect(() => {
         const arr = []
+        const arrNoCursor = [];
         grid.forEach((row, y) => {
             const inYbounds = row.yPx + row.height + nodeStyle.marginCollapsed >= screenPosition.y && row.yPx + nodeStyle.marginCollapsed <= (screenPosition.y + screenDimensions.height)
             const inXbounds = row.xPx + row.width >= screenPosition.x && row.xPx  <= screenPosition.x + screenDimensions.width
-            if ((inYbounds && inXbounds) || row === cursor) { 
+            if ((inYbounds && inXbounds)) { 
                  arr.push(row)
+                 arrNoCursor.push(row)
+            }
+            else if (row === cursor) {
+                arr.push(row)
             }
         })
         setGridWindow(arr);
+        setGridWindowWithoutCursor(arrNoCursor);
     }, [screenPosition, grid])
 
  
     const [spans, setSpans] = useState([])
     useEffect(() => {
-        if (!gridWindow?.length) return;
+        if (!gridWindowWithoutCursor?.length) return;
 
         const parentsNodeList = [];
-        let node = gridWindow[0];
+        let node = gridWindowWithoutCursor[0];
 
         // Find parent nodes with nextNode outside `gridWindow`
         while (node?.parent && !node.parent.root) {
             node = node.parent;
-            if (node.nextNode && !gridWindow.includes(node.nextNode)) {
+            if (node.nextNode && !gridWindowWithoutCursor.includes(node.nextNode)) {
                 parentsNodeList.push(node);
             }
         }
 
         const partialsList = [];
 
-        gridWindow.forEach((n) => {
+        gridWindowWithoutCursor.forEach((n) => {
             if (!parentsNodeList.includes(n)) {
                 // Clamp 'above' span height to avoid negative/oversized values
-                if (n.prevNode && !gridWindow.includes(n.prevNode)) {
+                if (n.prevNode && !gridWindowWithoutCursor.includes(n.prevNode)) {
                     const spanTop = screenPosition.y;
                     const spanBottom = n.yPx;
                     const height = Math.max(0, spanBottom - spanTop); // Ensure height ≥ 0
@@ -105,7 +113,7 @@ const DocumentRender = () => {
                 }
 
                 // Clamp 'below' span height
-                if (n.nextNode && !gridWindow.includes(n.nextNode)) {
+                if (n.nextNode && !gridWindowWithoutCursor.includes(n.nextNode)) {
                     const spanTop = n.yPx + n.height;
                     const spanBottom = screenPosition.y + screenDimensions.height;
                     const height = Math.max(0, spanBottom - spanTop); // Ensure height ≥ 0
@@ -128,12 +136,11 @@ const DocumentRender = () => {
 
         setSpans([...fullHeightSpans, ...partialsList]);
         setGridWindowRefresh(false);
-    }, [gridWindow, screenPosition.y, screenDimensions.height]);
+    }, [gridWindowWithoutCursor, screenPosition.y, screenDimensions.height]);
 
 
 
     useEffect(() => {
-        console.log("HOLA")
         if (!cursor) return setBreadcrumbs([])
         const inYbounds = cursor.yPx + cursor.height + nodeStyle.marginCollapsed >= screenPosition.y && cursor.yPx + nodeStyle.marginCollapsed <= (screenPosition.y + screenDimensions.height)
        if (!inYbounds) return setBreadcrumbs([]);
@@ -146,9 +153,6 @@ const DocumentRender = () => {
                 parentsNodeList.push(node);
             }
         }
-        console.log("NT", node.text)
-        const n = parentsNodeList.find((n) => n.text == "Programming Concept");
-        if (n) console.log(n.xPx + n.width - screenPosition.x)
         setBreadcrumbs(parentsNodeList.reverse().filter((bc) => bc.xPx + bc.width - screenPosition.x >= 0));
     }, [gridWindow, cursor, screenPosition.x])
 
