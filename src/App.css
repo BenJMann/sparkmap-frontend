@@ -2,6 +2,10 @@ body {
   margin: 0;
 }
 
+html, body {
+  overscroll-behavior-x: none; /* Blocks scroll-chaining + back/forward navigation */
+}
+
 .center-screen {
     display: flex;
     justify-content: center;
