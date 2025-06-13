@@ -133,11 +133,10 @@ const DocumentRender = () => {
 
 
     useEffect(() => {
+        console.log("HOLA")
         if (!cursor) return setBreadcrumbs([])
         const inYbounds = cursor.yPx + cursor.height + nodeStyle.marginCollapsed >= screenPosition.y && cursor.yPx + nodeStyle.marginCollapsed <= (screenPosition.y + screenDimensions.height)
-        const inXbounds = cursor.xPx + cursor.width >= screenPosition.x && cursor.xPx  <= screenPosition.x + screenDimensions.width
-        if (!inYbounds) return setBreadcrumbs([]);
-        if (!inXbounds) return;
+       if (!inYbounds) return setBreadcrumbs([]);
         let node = cursor;
         const parentsNodeList = [];
 
@@ -147,8 +146,9 @@ const DocumentRender = () => {
                 parentsNodeList.push(node);
             }
         }
+        console.log("NT", node.text)
         const n = parentsNodeList.find((n) => n.text == "Programming Concept");
-        if (n) console.log(n.text)
+        if (n) console.log(n.xPx + n.width - screenPosition.x)
         setBreadcrumbs(parentsNodeList.reverse().filter((bc) => bc.xPx + bc.width - screenPosition.x >= 0));
     }, [gridWindow, cursor, screenPosition.x])
 
