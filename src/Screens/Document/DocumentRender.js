@@ -81,9 +81,11 @@ const DocumentRender = () => {
 
  
     const [spans, setSpans] = useState([])
+
     useEffect(() => {
         if (!gridWindowWithoutCursor?.length) return;
 
+        const spanXOffset = 20; // Adjust this value to set how far from the left edge spans appear
         const parentsNodeList = [];
         let node = gridWindowWithoutCursor[0];
 
@@ -96,6 +98,7 @@ const DocumentRender = () => {
         }
 
         const partialsList = [];
+        const betweenSpansList = [];
 
         gridWindowWithoutCursor.forEach((n) => {
             if (!parentsNodeList.includes(n)) {
@@ -103,9 +106,9 @@ const DocumentRender = () => {
                 if (n.prevNode && !gridWindowWithoutCursor.includes(n.prevNode)) {
                     const spanTop = screenPosition.y;
                     const spanBottom = n.yPx;
-                    const height = Math.max(0, spanBottom - spanTop); // Ensure height ≥ 0
+                    const height = Math.max(0, spanBottom - spanTop);
                     partialsList.push({
-                        x: n.xPx + n.width / 2,
+                        x: n.xPx + spanXOffset, // Using fixed offset instead of center
                         y: spanTop,
                         type: 'above',
                         height,
@@ -116,9 +119,9 @@ const DocumentRender = () => {
                 if (n.nextNode && !gridWindowWithoutCursor.includes(n.nextNode)) {
                     const spanTop = n.yPx + n.height;
                     const spanBottom = screenPosition.y + screenDimensions.height;
-                    const height = Math.max(0, spanBottom - spanTop); // Ensure height ≥ 0
+                    const height = Math.max(0, spanBottom - spanTop);
                     partialsList.push({
-                        x: n.xPx + n.width / 2,
+                        x: n.xPx + spanXOffset, // Using fixed offset instead of center
                         y: spanTop,
                         type: 'below',
                         height,
@@ -127,14 +130,29 @@ const DocumentRender = () => {
             }
         });
 
-        // Full-height spans (if needed)
+        // Spans between visible nodes
+        gridWindowWithoutCursor.forEach((n) => {
+            if (n.nextNode && gridWindowWithoutCursor.includes(n.nextNode)) {
+                const nextNode = n.nextNode;
+                if (Math.abs(n.yPx - nextNode.yPx) > n.height) {
+                    betweenSpansList.push({
+                        x: n.xPx + spanXOffset, // Using fixed offset instead of center
+                        y: n.yPx + n.height,
+                        type: 'between',
+                        height: Math.max(0, nextNode.yPx - (n.yPx + n.height)),
+                    });
+                }
+            }
+        });
+
+        // Full-height spans
         const fullHeightSpans = parentsNodeList.map((node) => ({
-            x: node.xPx + node.width / 2,
+            x: node.xPx + spanXOffset, // Using fixed offset instead of center
             type: 'fullHeight',
             height: screenDimensions.height,
         }));
 
-        setSpans([...fullHeightSpans, ...partialsList]);
+        setSpans([...fullHeightSpans, ...partialsList, ...betweenSpansList]);
         setGridWindowRefresh(false);
     }, [gridWindowWithoutCursor, screenPosition.y, screenDimensions.height]);
 
@@ -164,13 +182,10 @@ const DocumentRender = () => {
                             style={{
                                 position: 'absolute',
                                 left: `${s.x}px`,
-                                top: s.type === 'above' ? `${screenPosition.y}px` : 
-                                    s.type === 'below' ? `${s.y}px` : 
+                                top: ['below', 'between'].includes(s.type) ? `${s.y}px` :     
                                     `${screenPosition.y}px`,
                                 width: '6px',
-                                height: s.type === 'fullHeight' ? `${s.height}px` : 
-                                    s.type === 'above' ? `${s.height}px` : 
-                                    `${s.height}px`,
+                                height: `${s.height}px`,
                                 pointerEvents: 'none', // Prevent blocking clicks
                             }}
                         >
