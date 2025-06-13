@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 
 import { DocumentContext } from "./Document";
 
@@ -68,11 +68,87 @@ const DocumentRender = () => {
             }
         })
         setGridWindow(arr);
-        setGridWindowRefresh(false)
     }, [screenPosition, grid])
+
+ 
+    const [spans, setSpans] = useState([])
+    useEffect(() => {
+        if (!gridWindow?.length) return;
+
+        const parentsNodeList = [];
+        let node = gridWindow[0];
+
+        // Find parent nodes with nextNode outside `gridWindow`
+        while (node?.parent && !node.parent.root) {
+            node = node.parent;
+            if (node.nextNode && !gridWindow.includes(node.nextNode)) {
+                parentsNodeList.push(node);
+            }
+        }
+
+        const partialsList = [];
+
+        gridWindow.forEach((n) => {
+            if (!parentsNodeList.includes(n)) {
+                // Clamp 'above' span height to avoid negative/oversized values
+                if (n.prevNode && !gridWindow.includes(n.prevNode)) {
+                    const spanTop = screenPosition.y;
+                    const spanBottom = n.yPx;
+                    const height = Math.max(0, spanBottom - spanTop); // Ensure height ≥ 0
+                    partialsList.push({
+                        x: n.xPx + n.width / 2,
+                        y: spanTop,
+                        type: 'above',
+                        height,
+                    });
+                }
+
+                // Clamp 'below' span height
+                if (n.nextNode && !gridWindow.includes(n.nextNode)) {
+                    const spanTop = n.yPx + n.height;
+                    const spanBottom = screenPosition.y + screenDimensions.height;
+                    const height = Math.max(0, spanBottom - spanTop); // Ensure height ≥ 0
+                    partialsList.push({
+                        x: n.xPx + n.width / 2,
+                        y: spanTop,
+                        type: 'below',
+                        height,
+                    });
+                }
+            }
+        });
+
+        // Full-height spans (if needed)
+        const fullHeightSpans = parentsNodeList.map((node) => ({
+            x: node.xPx + node.width / 2,
+            type: 'fullHeight',
+            height: screenDimensions.height,
+        }));
+
+        setSpans([...fullHeightSpans, ...partialsList]);
+    }, [gridWindow, screenPosition.y, screenDimensions.height]);
 
     return (
                     <>
+                    {spans.map((s, i) => (
+                        <div
+                            key={i}
+                            style={{
+                                position: 'absolute',
+                                left: `${s.x}px`,
+                                top: s.type === 'above' ? `${screenPosition.y}px` : 
+                                    s.type === 'below' ? `${s.y}px` : 
+                                    `${screenPosition.y}px`,
+                                width: '6px',
+                                height: s.type === 'fullHeight' ? `${s.height}px` : 
+                                    s.type === 'above' ? `${s.height}px` : 
+                                    `${s.height}px`,
+                                pointerEvents: 'none', // Prevent blocking clicks
+                            }}
+                        >
+                            <div style={{height: '100%', width: '50%', borderRight: '1px dashed #777'}} />
+                        </div>
+                    ))}
                     {gridWindow.map((row, i) => {
                         if (!row) return null
                         return (
