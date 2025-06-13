@@ -104,7 +104,7 @@ const Document = () => {
                 else node = cursor.children[0]
             }
         }
-        if (node.root) return
+        if (!node || node.root) return
         if (cursor) {
             cursor.parent.prevNav = cursor;
             cursor.dirtyStyles = true;
@@ -299,10 +299,10 @@ const getDimensionsOfText = function(text, styles) {
         const top = node.yPx;
         const bottom = node.yPx + node.height + 22;
 
-        const screenLeft = documentRef.current.scrollLeft
-        const screenTop = documentRef.current.scrollTop;
-        const screenRight = screenLeft + screenDimensions.width;
-        const screenBottom = screenTop + screenDimensions.height;
+        const screenLeft = documentRef.current.scrollLeft + 200;
+        const screenTop = documentRef.current.scrollTop + 200;
+        const screenRight = documentRef.current.scrollLeft + screenDimensions.width - 200;
+        const screenBottom = documentRef.current.scrollTop + screenDimensions.height - 200;
 
 
         let dx = 0, dy = 0;
@@ -314,7 +314,7 @@ const getDimensionsOfText = function(text, styles) {
         else if (bottom > screenBottom) dy = bottom - screenBottom
         else dy = 0
 
-        documentRef.current.scrollTo(screenLeft + dx, screenTop + dy)
+        documentRef.current.scrollTo(documentRef.current.scrollLeft + dx, documentRef.current.scrollTop + dy)
     }
 
     const getNodeScreenPosition = (node) => {
