@@ -65,6 +65,7 @@ const KeyManager = forwardRef(({functions, screenDimensions, totalDimensions, se
             [{key: Keys.x, modifiers:[Modifiers.Control]}, "f_copyNode"],
             [{key: Keys.v, modifiers:[Modifiers.Control, Modifiers.Shift]}, "f_pasteNodeAbove"],
             [{key: Keys.v, modifiers:[Modifiers.Control]}, "f_pasteNodeBelow"],
+            [{key: Keys.v, modifiers:[Modifiers.Alt, Modifiers.Control]}, "f_pasteNodeAsChild"],
             [{key: Keys.c, modifiers:[Modifiers.Control]}, "f_copyTreeToClipboard"],
             [{key: Keys.Tab, modifiers:[]}, "f_createChildNode"],
             [{key: Keys.Enter, modifiers:[]}, "f_toggleEdit"], 
@@ -207,6 +208,7 @@ const DocumentKeys = forwardRef(({children}, ref) => {
         setScreenPosition,
         copyNode,
         pasteNode,
+        pasteNodeAsChild,
         toggleCollapse,
         unmarkAsCopying,
         copyTreeToClipboard
@@ -227,6 +229,10 @@ const DocumentKeys = forwardRef(({children}, ref) => {
     const f_pasteNodeBelow = useCallback(() => {
         pasteNode(cursor, null, false)
     }, [cursor])
+
+    const f_pasteNodeAsChild = useCallback(() => {
+        pasteNodeAsChild(cursor)
+    })
 
     const f_createSiblingNodeAbove = useCallback(() => {
         if (isEditing)
@@ -348,6 +354,7 @@ const DocumentKeys = forwardRef(({children}, ref) => {
             f_copyNode,
             f_pasteNodeAbove,
             f_pasteNodeBelow,
+            f_pasteNodeAsChild,
             f_createChildNode,
             f_createSiblingNodeAbove,
             f_createSiblingNodeBelow,
@@ -358,7 +365,7 @@ const DocumentKeys = forwardRef(({children}, ref) => {
             f_toggleCollapse,
             f_unmarkAsCopying,
             f_copyTreeToClipboard,
-            f_doNothing
+            f_doNothing,
         }
 
      return <KeyManager ref={ref}

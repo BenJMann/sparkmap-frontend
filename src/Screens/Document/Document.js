@@ -167,6 +167,53 @@ const Document = () => {
         }
     };
 
+    const pasteNodeAsChild = (to, from) => {
+        const nodeFrom = from || nodeToCopy;
+        
+        if (!nodeFrom) {
+            console.error("No source node provided for pasting.");
+            return;
+        }
+    
+        // Unmark copying state if no source node (`from`) is provided
+        if (!from) {
+            unmarkAsCopying(nodeToCopy);
+        }
+
+        // Prevent pasting a node as a child of itself
+        if (isNodeParentOf(to, nodeFrom)) {
+            console.log("Cannot paste a node into one of its descendants.");
+            setData([...data]); // Force a re-render in case of UI feedback
+            return;
+        }
+
+        const fromParent = nodeFrom.parent;
+    
+        // Find removal index
+        const fromIdx = fromParent.children.indexOf(nodeFrom);
+    
+        if (fromIdx === -1) {
+            console.error("Invalid node indices for paste operation.");
+            return;
+        }
+
+        const [movedNode] = fromParent.children.splice(fromIdx, 1); // Remove from old parent
+        
+        if (to.children) to.children = [...to.children, movedNode]
+        else to.children = [movedNode]
+
+        // Reset copying state and update references
+        if (!from) {
+            setNodeToCopy(null);
+            moveCursor(nodeFrom);
+        }
+    
+        // Update the data structure and refresh the grid window
+        setData([...data]);
+        setGridWindowRefresh(true);
+
+        socket.emit("pasteNodeAsChild", {fromPath: calculatePath(nodeFrom), toPath: calculatePath(to)})
+    }
     const pasteNode = (to, from, before) => {
         const nodeFrom = from || nodeToCopy;
     
@@ -575,7 +622,8 @@ const getDimensionsOfText = function(text, styles) {
         copyTreeToClipboard,
         breadcrumbs,
         setBreadcrumbs,
-        breadcrumbHeight
+        breadcrumbHeight,
+        pasteNodeAsChild
      }
     
 

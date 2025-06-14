@@ -6,7 +6,7 @@ import { DocumentContext } from "./Document";
 const DocumentSocket = () => {
     const {socket, socketLoaded, socketDisconnected} = useContext(WebsocketsContext);
     const {loggedIn} = useContext(LoginContext)
-    const {data, setData, setWaitingUpdateQueue, waitingUpdateQueue, setUpdatePending, updatePending, calculatePath, moveCursor, cursor, documentId, nodeStyle, getDimensionsOfNode, setDocumentName, pasteNode} = useContext(DocumentContext)
+    const {data, setData, setWaitingUpdateQueue, waitingUpdateQueue, setUpdatePending, updatePending, calculatePath, moveCursor, cursor, documentId, nodeStyle, getDimensionsOfNode, setDocumentName, pasteNode, pasteNodeAsChild} = useContext(DocumentContext)
 
     const runScheduledUpdates = (temporaryId) => {
         if (!updatePending[temporaryId]) return;
@@ -241,6 +241,21 @@ const DocumentSocket = () => {
                     const fromNode = pathResultFrom.node;
                     const toNode = pathResultTo.node;
                     pasteNode(toNode, fromNode, d.before)
+                }
+            })
+            socket.removeAllListeners("nodePastedAsChild");
+            socket.on("nodePastedAsChild", (d) => {
+                const pathResultFrom = resolvePath(d.fromPath);
+                if (pathResultFrom.status !== "success")
+                        console.log("Path resolve error From node: " + pathResultFrom.message)
+                const pathResultTo = resolvePath(d.toPath);
+                if (pathResultTo.status !== "success")
+                        console.log("Path resolve error To node: " + pathResultTo.message)
+
+                if (pathResultFrom.status === "success" && pathResultTo.status === "success") {
+                    const fromNode = pathResultFrom.node;
+                    const toNode = pathResultTo.node;
+                    pasteNodeAsChild(toNode, fromNode)
                 }
             })
         }
