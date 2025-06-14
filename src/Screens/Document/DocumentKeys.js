@@ -71,10 +71,14 @@ const KeyManager = forwardRef(({functions, screenDimensions, totalDimensions, se
             [{key: Keys.Enter, modifiers:[]}, "f_toggleEdit"], 
             [{key: Keys.Enter, modifiers:[Modifiers.Control, Modifiers.Shift]}, "f_createSiblingNodeAbove"],
             [{key: Keys.Enter, modifiers:[Modifiers.Control]}, "f_createSiblingNodeBelow"],
+            [{key: Keys.Enter, modifiers:[Modifiers.Alt]}, "f_generateSuggestionAI"],
             [{key: Keys.Delete, modifiers:[]}, "f_deleteCell"],
             [{key: Keys.Escape, modifiers:[], mode: Modes.Normal}, "f_unmarkAsCopying"], 
             [{key: Keys.Escape, modifiers:[], mode: Modes.Edit}, "f_escapeEdit"], 
             [{key: Keys.Space, modifiers:[Modifiers.Control]}, "f_toggleCollapse"], 
+
+            [{key: Keys.c, modifiers:[Modifiers.Alt]}, "f_logNode"], 
+
 
             [{key: Keys.Typable, modifiers:[Modifiers.OptionalShift], mode: Modes.Normal}, "f_enterType"],
             
@@ -211,8 +215,17 @@ const DocumentKeys = forwardRef(({children}, ref) => {
         pasteNodeAsChild,
         toggleCollapse,
         unmarkAsCopying,
-        copyTreeToClipboard
+        copyTreeToClipboard,
+        generateSuggestionAI
     } = useContext(DocumentContext)
+
+    const f_logNode = useCallback(() => {
+        console.log(cursor);;
+    }, [cursor])
+
+    const f_generateSuggestionAI = useCallback(() => {
+        generateSuggestionAI(cursor);
+    }, [cursor])
 
     const f_deleteCell = useCallback(() => {
         deleteCell(cursor);
@@ -366,6 +379,8 @@ const DocumentKeys = forwardRef(({children}, ref) => {
             f_unmarkAsCopying,
             f_copyTreeToClipboard,
             f_doNothing,
+            f_generateSuggestionAI,
+            f_logNode
         }
 
      return <KeyManager ref={ref}

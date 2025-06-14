@@ -258,6 +258,32 @@ const DocumentSocket = () => {
                     pasteNodeAsChild(toNode, fromNode)
                 }
             })
+            socket.removeAllListeners("suggestionGenerated");
+            socket.on("suggestionGenerated", (d) => {
+                const pathResult = resolvePath(d.path);
+                console.log("AHDS", d)
+                if (pathResult.status === "success") {
+                    const node = pathResult.node;
+                    const children = JSON.parse(d.newNodes).root[0].children
+                    const recurseChildren = (node) => {
+                        const {width, height} = getDimensionsOfNode(node);
+                        node.width = width;
+                        node.height = height;
+                        if (node.children?.length === 0) node.children = undefined;
+                        if (node.children) node.children.forEach(recurseChildren);
+                    }
+                    children.forEach(recurseChildren)
+                    if (node.children)
+                        node.children = [...node.children, ...children]
+                    else {
+                        console.log(children);
+                        node.children = [...children]
+                    }
+                    setData([...data])
+                } else {
+                    console.log("Path resolve error: " + pathResult.message)
+                }
+            })
         }
     }, [socketLoaded, data, cursor])
 

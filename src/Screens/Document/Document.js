@@ -167,6 +167,34 @@ const Document = () => {
         }
     };
 
+    const generateSuggestionAI = () => {
+        if (!cursor) return;
+        // const nodesToParent = []
+        // const getNodesToParent = (node) => {
+        //     nodesToParent.push(node);
+        //     if (node.parent && !node.parent.root)
+        //         getNodesToParent(node.parent)
+        // }
+        // getNodesToParent(cursor);
+
+        const addToNewMap = (node) => {
+            const newNodes = [];
+            node.children.forEach((c) => {
+                const newNode = {text: c.text, ...(c === cursor ? {nodeToGenerateFrom: true} : {})}
+                newNodes.push(newNode)
+                if (c.children) {
+                    const children = addToNewMap(c);
+                    newNode.children = children;
+                }
+            })
+            return newNodes;
+        }
+        const newMap = addToNewMap(data[0]);
+
+        console.log("Generating suggestion")
+        socket.emit("generateSuggestion", {node: calculatePath(cursor), map: JSON.stringify(newMap)});
+    }
+
     const pasteNodeAsChild = (to, from) => {
         const nodeFrom = from || nodeToCopy;
         
@@ -623,7 +651,8 @@ const getDimensionsOfText = function(text, styles) {
         breadcrumbs,
         setBreadcrumbs,
         breadcrumbHeight,
-        pasteNodeAsChild
+        pasteNodeAsChild,
+        generateSuggestionAI
      }
     
 
