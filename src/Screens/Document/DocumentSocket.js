@@ -6,7 +6,7 @@ import { DocumentContext } from "./Document";
 const DocumentSocket = () => {
     const {socket, socketLoaded, socketDisconnected} = useContext(WebsocketsContext);
     const {loggedIn} = useContext(LoginContext)
-    const {data, setData, setWaitingUpdateQueue, waitingUpdateQueue, setUpdatePending, updatePending, calculatePath, moveCursor, cursor, documentId, nodeStyle, getDimensionsOfNode, setDocumentName, pasteNode, pasteNodeAsChild} = useContext(DocumentContext)
+    const {data, setData, setWaitingUpdateQueue, waitingUpdateQueue, setUpdatePending, updatePending, calculatePath, moveCursor, cursor, documentId, nodeStyle, getDimensionsOfNode, setDocumentName, pasteNode, pasteNodeAsChild, nodeMoved} = useContext(DocumentContext)
 
     const runScheduledUpdates = (temporaryId) => {
         if (!updatePending[temporaryId]) return;
@@ -258,10 +258,20 @@ const DocumentSocket = () => {
                     pasteNodeAsChild(toNode, fromNode)
                 }
             })
+            socket.removeAllListeners("nodeMoved");
+            socket.on("nodeMoved", (d) => {
+                const pathResult = resolvePath(d.path);
+                if (pathResult.status !== "success")
+                        console.log("Path resolve error From node: " + pathResult.message)
+
+                if (pathResult.status === "success") {
+                    const node = pathResult.node;
+                    nodeMoved(node, d.children)
+                }
+            })
             socket.removeAllListeners("suggestionGenerated");
             socket.on("suggestionGenerated", (d) => {
                 const pathResult = resolvePath(d.path);
-                console.log("AHDS", d)
                 if (pathResult.status === "success") {
                     const node = pathResult.node;
                     const children = JSON.parse(d.newNodes).root[0].children

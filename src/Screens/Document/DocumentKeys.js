@@ -58,6 +58,8 @@ const KeyManager = forwardRef(({functions, screenDimensions, totalDimensions, se
             [{key: Keys.ArrowRight, modifiers:[]}, "f_moveCursorRight"],
             [{key: Keys.ArrowUp, modifiers:[]}, "f_moveCursorUp"],
             [{key: Keys.ArrowDown, modifiers:[]}, "f_moveCursorDown"],
+            [{key: Keys.ArrowUp, modifiers:[Modifiers.Alt]}, "f_moveNodeUp"],
+            [{key: Keys.ArrowDown, modifiers:[Modifiers.Alt]}, "f_moveNodeDown"],
             [{key: Keys.ArrowLeft, modifiers:[Modifiers.Shift]}, "f_moveCursorLeftAndSelect"],
             [{key: Keys.ArrowRight, modifiers:[Modifiers.Shift]}, "f_moveCursorRightAndSelect"],
             [{key: Keys.ArrowUp, modifiers:[Modifiers.Shift]}, "f_moveCursorUpAndSelect"],
@@ -193,7 +195,7 @@ const KeyManager = forwardRef(({functions, screenDimensions, totalDimensions, se
                 style={{width: screenDimensions.width, height: screenDimensions.height, outline: 'none'}}
                 >
                 {subchildren}
-                <div className="stretcher" style={{top: totalDimensions.height, left: totalDimensions.width}}></div>
+                <div className="stretcher" style={{top: totalDimensions.height + 50, left: totalDimensions.width}}></div>
             </div>
 })
 const DocumentKeys = forwardRef(({children}, ref) => {
@@ -216,8 +218,17 @@ const DocumentKeys = forwardRef(({children}, ref) => {
         toggleCollapse,
         unmarkAsCopying,
         copyTreeToClipboard,
-        generateSuggestionAI
+        generateSuggestionAI,
+        moveNode
     } = useContext(DocumentContext)
+
+    const f_moveNodeUp = useCallback(() => {
+        moveNode(cursor, "up");
+    }, [cursor])
+
+    const f_moveNodeDown = useCallback(() => {
+        moveNode(cursor, "down");
+    }, [cursor])
 
     const f_logNode = useCallback(() => {
         console.log(cursor);;
@@ -380,7 +391,9 @@ const DocumentKeys = forwardRef(({children}, ref) => {
             f_copyTreeToClipboard,
             f_doNothing,
             f_generateSuggestionAI,
-            f_logNode
+            f_logNode,
+            f_moveNodeUp,
+            f_moveNodeDown
         }
 
      return <KeyManager ref={ref}

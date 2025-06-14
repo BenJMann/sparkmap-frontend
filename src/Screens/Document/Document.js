@@ -166,6 +166,54 @@ const Document = () => {
             node.children.forEach(unmarkAsCopying);
         }
     };
+    const moveNodeTimeoutRef = useRef(null);
+    const moveNode = (node, direction) => {
+        if (!["up", "down"].includes(direction.toLowerCase())) throw new Error("Invalid direction", direction)
+    
+        const nodeParent = node.parent;
+        const siblings = nodeParent.children;
+        const idx = siblings.indexOf(node)
+
+        if (idx === -1) throw new Error("Node is not in list", node);
+
+        const newIdx = direction == "up" ? idx -1 : idx+1;
+
+        if (newIdx < 0 || newIdx > siblings.length -1) return;
+    
+        if (direction == "up") {
+            scrollNodeIntoView(siblings[idx-1]);
+            nodeParent.children = [
+            ...siblings.slice(0, idx-1), 
+            node,
+            siblings[idx-1],
+            ...siblings.slice(idx+1, siblings.length)
+            ]
+        }
+        else {
+            scrollNodeIntoView(siblings[idx+1]);
+            nodeParent.children = [
+            ...siblings.slice(0, idx), 
+            siblings[idx+1],
+            node,
+            ...siblings.slice(idx+2, siblings.length)
+        ];
+        }
+        setData([...data])
+
+        clearTimeout(moveNodeTimeoutRef.current);
+        moveNodeTimeoutRef.current = setTimeout(
+            () => socket.emit("moveNode", {
+                path: calculatePath(nodeParent), 
+                children: nodeParent.children.map((s) => s.id)}),
+            300)
+    }
+
+    const nodeMoved = (node, childrenIds) => {
+        node.children = node.children.sort((a, b) => {
+            return childrenIds.indexOf(a.id) - childrenIds.indexOf(b.id)
+        })
+        setData([...data])
+    }
 
     const generateSuggestionAI = () => {
         if (!cursor) return;
@@ -191,7 +239,6 @@ const Document = () => {
         }
         const newMap = addToNewMap(data[0]);
 
-        console.log("Generating suggestion")
         socket.emit("generateSuggestion", {node: calculatePath(cursor), map: JSON.stringify(newMap)});
     }
 
@@ -652,7 +699,9 @@ const getDimensionsOfText = function(text, styles) {
         setBreadcrumbs,
         breadcrumbHeight,
         pasteNodeAsChild,
-        generateSuggestionAI
+        generateSuggestionAI,
+        moveNode,
+        nodeMoved
      }
     
 
