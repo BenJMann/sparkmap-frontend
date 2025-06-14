@@ -167,7 +167,7 @@ const Document = () => {
         }
     };
 
-    const pasteNode = (to, from, before, child) => {
+    const pasteNode = (to, from, before) => {
         const nodeFrom = from || nodeToCopy;
     
         if (!nodeFrom) {

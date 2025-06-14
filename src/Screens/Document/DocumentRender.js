@@ -161,7 +161,8 @@ const DocumentRender = () => {
     useEffect(() => {
         if (!cursor) return setBreadcrumbs([])
         const inYbounds = cursor.yPx + cursor.height + nodeStyle.marginCollapsed >= screenPosition.y && cursor.yPx + nodeStyle.marginCollapsed <= (screenPosition.y + screenDimensions.height)
-       if (!inYbounds) return setBreadcrumbs([]);
+        if (!inYbounds) return setBreadcrumbs([]);
+        
         let node = cursor;
         const parentsNodeList = [];
 

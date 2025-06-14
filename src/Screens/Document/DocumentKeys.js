@@ -221,11 +221,11 @@ const DocumentKeys = forwardRef(({children}, ref) => {
     })
 
     const f_pasteNodeAbove = useCallback(() => {
-        pasteNode(cursor, false)
+        pasteNode(cursor, null, true)
     }, [cursor])
 
     const f_pasteNodeBelow = useCallback(() => {
-        pasteNode(cursor, false)
+        pasteNode(cursor, null, false)
     }, [cursor])
 
     const f_createSiblingNodeAbove = useCallback(() => {

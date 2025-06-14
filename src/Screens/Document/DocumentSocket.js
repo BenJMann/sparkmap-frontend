@@ -240,7 +240,7 @@ const DocumentSocket = () => {
                 if (pathResultFrom.status === "success" && pathResultTo.status === "success") {
                     const fromNode = pathResultFrom.node;
                     const toNode = pathResultTo.node;
-                    pasteNode(toNode, fromNode, d.before, d.child)
+                    pasteNode(toNode, fromNode, d.before)
                 }
             })
         }
